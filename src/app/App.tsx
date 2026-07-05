@@ -367,17 +367,18 @@ function ProductCard({
 
   return (
     <div
-      className="bg-card rounded-[20px] overflow-hidden flex flex-col group min-h-[460px] shadow-[0_2px_14px_rgba(0,0,0,0.06)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_10px_32px_rgba(0,0,0,0.12)]"
+      className="bg-card rounded-[20px] overflow-hidden flex flex-col group md:min-h-[460px] shadow-[0_2px_14px_rgba(0,0,0,0.06)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_10px_32px_rgba(0,0,0,0.12)]"
     >
       {/* Image — ~65% of card height */}
       <button
         type="button"
         onClick={() => onNavigate("detail", product)}
-        className="relative overflow-hidden bg-[#E8E2D0] h-[280px] sm:h-[300px] flex-shrink-0"
+        className="relative overflow-hidden bg-[#E8E2D0] h-[240px] sm:h-[300px] md:h-[360px] flex-shrink-0"
       >
         <ImageWithFallback
           src={imageSrc}
           alt={product.name}
+          loading="lazy"
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
           style={product.localImg
             ? { objectPosition: "center center" }
@@ -599,6 +600,7 @@ function HomePage({ onNavigate, variantSelections, setVariantSelections, testimo
                 <img
                   key={image}
                   src={image}
+                  loading="lazy"
                   alt="Homemade Maharashtrian festive sweets and faral platter"
                   aria-hidden={index !== activeHeroIndex}
                   className={`absolute inset-0 h-full w-full object-cover object-[center_30%] transition-opacity duration-500 ease-in-out motion-reduce:transition-none md:object-center lg:object-right ${index === activeHeroIndex ? "opacity-100" : "opacity-0"
