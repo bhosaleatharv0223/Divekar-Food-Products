@@ -1,0 +1,1027 @@
+import { useState } from "react";
+import {
+  ShoppingCart, Search, Menu, X, Star, ChevronRight, ChevronLeft,
+  Phone, MessageCircle, Clock, Leaf, Award, Check, MapPin, Package,
+} from "lucide-react";
+import { ImageWithFallback } from "@/app/components/figma/ImageWithFallback";
+
+// ── Brand assets ──────────────────────────────────────────────────────────────
+import imgLogo from "@/imports/ChatGPT_Image_Jul_4__2026__04_42_01_PM.png";
+
+// ── Real product photos ───────────────────────────────────────────────────────
+import imgAnarse from "@/imports/anarse.png";
+import imgBhajniChakli from "@/imports/bhajni-chakli.png";
+import imgCornChivda from "@/imports/corn-chivda.png";
+import imgPudachiKaranji from "@/imports/pudachi-karanji.png";
+import imgShevCheLadoo from "@/imports/shev-che-ladoo.png";
+import imgSweetShankarpali from "@/imports/sweet-shankarpali.png";
+import imgWheatMathri from "@/imports/wheat-mathri.png";
+
+// ── Types ──────────────────────────────────────────────────────────────────────
+
+type Page = "home" | "shop" | "detail";
+type FilterCategory = "all" | "ladoo" | "faral" | "chiwda" | "shev";
+type Variant = "oil" | "ghee";
+type Weight = 250 | 500 | 1000;
+
+interface Product {
+  id: number;
+  name: string;
+  category: "ladoo" | "faral" | "chiwda" | "shev";
+  categoryLabel: string;
+  shortDesc: string;
+  ingredients: string;
+  price: number;
+  gheePrice?: number;
+  /** Unsplash URL fallback for products without local photos */
+  image: string;
+  /** ES-module imported local photo — takes precedence over image */
+  localImg?: string;
+  featured?: boolean;
+  hasVariant?: boolean;
+}
+
+interface Testimonial {
+  name: string;
+  location: string;
+  rating: number;
+  text: string;
+}
+
+type NavigateFn = (page: Page, product?: Product, filter?: FilterCategory) => void;
+
+// ── Unsplash fallback URLs ────────────────────────────────────────────────────
+
+const UNSUNS = {
+  ladoo1:   "https://images.unsplash.com/photo-1695568181558-034b7d3e49eb?w=700&h=500&fit=crop&auto=format",
+  ladoo2:   "https://images.unsplash.com/photo-1695568181440-aca4dac18650?w=700&h=500&fit=crop&auto=format",
+  ladoo3:   "https://images.unsplash.com/photo-1695568181747-f54dff1d4654?w=700&h=500&fit=crop&auto=format",
+  ladoo4:   "https://images.unsplash.com/photo-1635952346904-95f2ccfcd029?w=700&h=500&fit=crop&auto=format",
+  snack1:   "https://images.unsplash.com/photo-1709091052718-3cb8a990edfa?w=700&h=500&fit=crop&auto=format",
+  snack2:   "https://images.unsplash.com/photo-1632046320635-57b802bcd60e?w=700&h=500&fit=crop&auto=format",
+  hero:       "https://images.unsplash.com/photo-1695568181717-f54dff1d4654?w=900&h=800&fit=crop&auto=format",
+  catLadoo: "https://images.unsplash.com/photo-1695568181558-034b7d3e49eb?w=900&h=620&fit=crop&auto=format",
+};
+
+// ── Product Data ───────────────────────────────────────────────────────────────
+
+const PRODUCTS: Product[] = [
+  // ── Immunity Ladoos ────────────────────────────────────────────────────────
+  { id: 1,  name: "Dink Ladoo",          category: "ladoo", categoryLabel: "LADOO",
+    shortDesc: "Jaggery, gum resin & dry fruits — warming winter immunity boost",
+             ingredients: "Gum resin (dink), jaggery, wheat flour, dry fruits, pure ghee, cardamom",
+    price: 650,  image: UNSUNS.ladoo1 },
+  { id: 2,  name: "Khajur Dryfruit Ladoo", category: "ladoo", categoryLabel: "LADOO",
+    shortDesc: "Premium Medjool dates blended with mixed dry fruits, no sugar added",
+           ingredients: "Medjool dates, almonds, cashews, pistachios, walnuts, cardamom",
+             price: 1200, image: UNSUNS.ladoo2 },
+  { id: 3,  name: "Peanut Ladoo",        category: "ladoo", categoryLabel: "LADOO",
+    shortDesc: "Roasted peanuts & jaggery — simple, wholesome, protein-packed",
+                 ingredients: "Peanuts, jaggery, cardamom, dry coconut",
+                                     price: 480,  image: UNSUNS.ladoo3 },
+  { id: 4,  name: "Methi Dink Ladoo",   category: "ladoo", categoryLabel: "LADOO",
+    shortDesc: "Fenugreek seeds & gum resin — traditional post-delivery nourishment",
+           ingredients: "Fenugreek seeds, gum resin, jaggery, wheat flour, ghee",
+                     price: 700,  image: UNSUNS.ladoo4 },
+  { id: 5,  name: "Aliv Ladoo",         category: "ladoo", categoryLabel: "LADOO",
+    shortDesc: "Garden cress seeds — iron-rich, powerful immunity booster",
+                      ingredients: "Aliv seeds, jaggery, dry coconut, ghee, cardamom",
+                           price: 750,  image: UNSUNS.ladoo1 },
+  { id: 6,  name: "Moong Dal Ladoo",    category: "ladoo", categoryLabel: "LADOO",
+    shortDesc: "Yellow moong dal roasted with jaggery & pure ghee",
+                             ingredients: "Yellow moong dal, jaggery, ghee, cardamom, dry coconut",
+                     price: 550,  image: UNSUNS.ladoo2 },
+  { id: 7,  name: "Hirve Moong Ladoo",  category: "ladoo", categoryLabel: "LADOO",
+    shortDesc: "Green moong dal — protein-rich, light on the stomach",
+                          ingredients: "Green moong dal, jaggery, ghee, cardamom",
+                                   price: 580,  image: UNSUNS.ladoo3 },
+  { id: 8,  name: "Urad Dal Ladoo",     category: "ladoo", categoryLabel: "LADOO",
+    shortDesc: "Black gram with ghee — traditionally served for bone health",
+                    ingredients: "Urad dal, jaggery, ghee, cardamom, edible gum",
+                              price: 520,  image: UNSUNS.ladoo4 },
+  { id: 9,  name: "Javas Ladoo",        category: "ladoo", categoryLabel: "LADOO",
+    shortDesc: "Flaxseeds with jaggery — omega-3 rich, heart-healthy snack",
+                    ingredients: "Flaxseeds (javas), jaggery, dry coconut, cardamom",
+                          price: 620,  image: UNSUNS.ladoo1 },
+  { id: 10, name: "Nachni (Ragi) Ladoo",category: "ladoo", categoryLabel: "LADOO",
+    shortDesc: "Finger millet with jaggery — calcium-rich, bone-strengthening",
+                 ingredients: "Ragi flour, jaggery, ghee, dry coconut, cardamom",
+                           price: 500,  image: UNSUNS.ladoo2 },
+  { id: 11, name: "Tilgud Ladoo",       category: "ladoo", categoryLabel: "LADOO",
+    shortDesc: "Sesame & jaggery — Makar Sankranti special, warming & nutritious",
+              ingredients: "Sesame seeds, jaggery, ghee, cardamom",
+                                      price: 580,  image: UNSUNS.ladoo3 },
+  { id: 12, name: "Paushtik Ladoo",     category: "ladoo", categoryLabel: "LADOO",
+    shortDesc: "Multi-grain nutritious blend — the ultimate health ladoo",
+                      ingredients: "Mixed grains, dry fruits, jaggery, ghee, cardamom",
+                          price: 650,  image: UNSUNS.ladoo4 },
+  { id: 13, name: "Wheat Ladoo",        category: "ladoo", categoryLabel: "LADOO",
+    shortDesc: "Whole wheat flour with pure ghee & jaggery — classic Maharashtrian",
+            ingredients: "Whole wheat flour, jaggery, ghee, cardamom",
+                                 price: 480,  image: UNSUNS.ladoo1 },
+
+
+  // ── Faral & Sweets ────────────────────────────────────────────────────────
+  { id: 14, name: "Bhajni Chakli",      category: "faral", categoryLabel: "FARAL",
+    shortDesc: "Crispy spiral snack from mixed flour — Diwali essential",
+                       ingredients: "Mixed flour blend, sesame seeds, cumin, carom seeds, butter",
+                price: 580,  image: UNSUNS.snack1, localImg: imgBhajniChakli, featured: true },
+  { id: 15, name: "Rawa Ladoo",         category: "faral", categoryLabel: "LADOO",
+    shortDesc: "Semolina & coconut ladoo — a quick-prep festive classic",
+                       ingredients: "Semolina, coconut, sugar, ghee, cardamom, cashews",
+                          price: 520,  image: UNSUNS.ladoo3 },
+  { id: 16, name: "Bundi Ladoo",        category: "faral", categoryLabel: "LADOO",
+    shortDesc: "Tiny besan boondi spheres rolled in sugar syrup with saffron",
+                  ingredients: "Besan, sugar, ghee, saffron, cardamom, cloves",
+                              price: 580,  image: UNSUNS.ladoo4 },
+  { id: 17, name: "Shev Che Ladoo",     category: "faral", categoryLabel: "LADOO",
+    shortDesc: "Crispy sev bound with jaggery — uniquely textured & satisfying",
+                ingredients: "Besan sev, jaggery, ghee, sesame, cardamom",
+                                 price: 550,  image: UNSUNS.snack2, localImg: imgShevCheLadoo, featured: true },
+  { id: 18, name: "Besan Ladoo",        category: "faral", categoryLabel: "LADOO",
+    shortDesc: "Slow-roasted chickpea flour with ghee & sugar — melt-in-mouth",
+                 ingredients: "Besan, sugar, pure ghee, cardamom, almonds",
+                                 price: 520,  image: UNSUNS.ladoo2 },
+  { id: 19, name: "Sweet Shankarpali",  category: "faral", categoryLabel: "FARAL",
+    shortDesc: "Diamond-cut pastry, subtly sweet & melt-in-your-mouth crispy",
+                  ingredients: "Wheat flour, sugar, ghee, cardamom, milk",
+                                   price: 500,  image: UNSUNS.snack1, localImg: imgSweetShankarpali, featured: true },
+  { id: 20, name: "Namkin Shankarpali", category: "faral", categoryLabel: "FARAL",
+    shortDesc: "Savory crispy diamond pastry — perfect with a hot cup of chai",
+                 ingredients: "Wheat flour, butter, carom seeds, sesame, salt, chilli",
+                     price: 480,  image: UNSUNS.snack2 },
+  { id: 21, name: "Wheat Mathri",       category: "faral", categoryLabel: "FARAL",
+    shortDesc: "Whole wheat crispy crackers — healthier, rustic, flaky",
+                        ingredients: "Whole wheat flour, carom seeds, ghee, salt, pepper",
+                         price: 480,  image: UNSUNS.snack1, localImg: imgWheatMathri },
+  { id: 22, name: "Pudachi Karanji",    category: "faral", categoryLabel: "FARAL",
+    shortDesc: "Coconut-filled crescent pastry — Diwali favourite, price varies by medium",
+     ingredients: "Wheat flour, dry coconut, sugar, cardamom, sesame",
+                          price: 580,  gheePrice: 750,  image: UNSUNS.snack2, localImg: imgPudachiKaranji, hasVariant: true },
+  { id: 23, name: "Chirote",            category: "faral", categoryLabel: "FARAL",
+    shortDesc: "Layered sweet puff pastry, dusted with powdered sugar",
+                         ingredients: "All-purpose flour, ghee, sugar, cardamom, saffron",
+                          price: 620,  image: UNSUNS.snack2 },
+  { id: 24, name: "Anarse",             category: "faral", categoryLabel: "FARAL",
+    shortDesc: "Traditional Diwali sesame rice cookies — delicate, melt-away",
+                  ingredients: "Rice flour, sesame seeds, jaggery, ghee or refined oil",
+                     price: 650,  gheePrice: 850,  image: UNSUNS.snack1, localImg: imgAnarse, hasVariant: true },
+
+
+  // ── Chiwda ─────────────────────────────────────────────────────────────────
+  { id: 25, name: "Patal Poha Chiwda",  category: "chiwda", categoryLabel: "CHIWDA",
+    shortDesc: "Thin flattened rice mixture — light, crunchy & addictive",
+                    ingredients: "Thin poha, peanuts, curry leaves, mustard seeds, turmeric, sugar",
+          price: 520,  image: UNSUNS.snack2 },
+  { id: 26, name: "Corn Chiwda",        category: "chiwda", categoryLabel: "CHIWDA",
+    shortDesc: "Corn puffs mixture — light, crunchy everyday snack",
+                          ingredients: "Corn puffs, peanuts, dry coconut, curry leaves, spices",
+                     price: 500,  image: UNSUNS.snack1, localImg: imgCornChivda },
+  { id: 27, name: "Bhadang Chiwda",     category: "chiwda", categoryLabel: "CHIWDA",
+    shortDesc: "Spiced puffed rice — Kolhapur-style street food crunch",
+                      ingredients: "Puffed rice, peanuts, dried onion, spices, curry leaves",
+                    price: 480,  image: UNSUNS.snack2 },
+
+
+  // ── Shev ───────────────────────────────────────────────────────────────────
+  { id: 28, name: "Lasun Shev",         category: "shev", categoryLabel: "SHEV",
+    shortDesc: "Garlic-flavored crispy sev — bold, aromatic, utterly moreish",
+                  ingredients: "Besan flour, garlic, carom seeds, red chilli, oil",
+                          price: 500,  image: UNSUNS.snack2 },
+];
+
+const TESTIMONIALS: Testimonial[] = [
+  { name: "Priya Joshi",     location: "Kothrud, Pune",     rating: 5,
+    text: "The Dink Ladoos are exactly like my mother-in-law used to make. Pure jaggery, no shortcuts. We order every winter without fail." },
+  { name: "Meera Kulkarni",  location: "Wakad, Pune",       rating: 5,
+    text: "Sent a box of Bhajni Chakli and Bundi Ladoos to my sister in the US. She said it tasted like home. That says everything!" },
+  { name: "Rahul Deshpande", location: "Viman Nagar, Pune", rating: 5,
+    text: "Order every Diwali for the past 4 years. The Pudachi Karanji in pure ghee is exceptional. Fresh, hygienic, right on time." },
+  { name: "Sunita Pawar",    location: "Magarpatta, Pune",  rating: 5,
+    text: "Khajur Dryfruit Ladoos are my go-to for gifting. No preservatives, and the taste is absolutely genuine home-made." },
+];
+
+// ── Helpers ───────────────────────────────────────────────────────────────────
+
+const WA_NUMBER = "919579702008";
+const DEFAULT_WA_MSG = "Hello! I'd like to place an order for Divekar Foods products. Could you please share availability and delivery details?";
+
+function buildWaURL(msg: string) {
+  return `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`;
+}
+
+function computePrice(product: Product, variant: Variant): number {
+  if (product.hasVariant && variant === "ghee" && product.gheePrice) return product.gheePrice;
+  return product.price;
+}
+
+function categoryDisplayName(cat: Product["category"]): string {
+  if (cat === "ladoo") return "Immunity Ladoo";
+  if (cat === "faral") return "Festival Faral";
+  if (cat === "chiwda") return "Chiwda";
+  return "Shev";
+}
+
+// ── Micro-components ──────────────────────────────────────────────────────────
+
+function VegDot() {
+  return (
+    <div className="w-5 h-5 bg-white border-2 border-green-600 rounded-sm flex items-center justify-center shadow-sm flex-shrink-0">
+      <div className="w-2.5 h-2.5 bg-green-600 rounded-full" />
+    </div>
+  );
+}
+
+function StarRow({ rating }: { rating: number }) {
+  return (
+    <div className="flex gap-0.5">
+      {Array.from({ length: rating }).map((_, i) => (
+        <Star key={i} size={14} fill="#FDD835" stroke="#FDD835" />
+      ))}
+    </div>
+  );
+}
+
+// Real circular badge from the uploaded brand asset
+function LogoBadge({ size = 44 }: { size?: number }) {
+  return (
+    <ImageWithFallback
+      src={imgLogo}
+      alt="Divekar Foods logo"
+      className="rounded-full object-cover flex-shrink-0"
+      style={{ width: size, height: size, display: "block" }}
+    />
+  );
+}
+
+// ── Product Card ──────────────────────────────────────────────────────────────
+
+function ProductCard({
+  product, variant, onVariantChange, onAddToCart, addedToCart, onNavigate,
+}: {
+  product: Product; variant: Variant; onVariantChange: (v: Variant) => void;
+  onAddToCart: (id: number) => void; addedToCart: number | null; onNavigate: NavigateFn;
+}) {
+  const isAdded = addedToCart === product.id;
+  const price = computePrice(product, variant);
+  const imageSrc = product.localImg ?? product.image;
+
+  return (
+    <div
+      className="bg-card rounded-[20px] overflow-hidden flex flex-col group"
+      style={{ minHeight: 460, boxShadow: "0 2px 14px rgba(0,0,0,0.06)", transition: "box-shadow 0.28s ease, transform 0.28s ease" }}
+      onMouseEnter={e => { (e.currentTarget as HTMLElement).style.boxShadow = "0 10px 32px rgba(0,0,0,0.122)"; (e.currentTarget as HTMLElement).style.transform = "translateY(-3px)"; }}
+      onMouseLeave={e => { (e.currentTarget as HTMLElement).style.boxShadow = "0 2px 14px rgba(0,0,0,0.06)"; (e.currentTarget as HTMLElement).style.transform = "translateY(0)"; }}
+    >
+      {/* Image — ~65% of card height */}
+      <div
+        className="relative cursor-pointer overflow-hidden bg-[#E8E2D0]"
+        style={{ height: 300, flexShrink: 0 }}
+        onClick={() => onNavigate("detail", product)}
+      >
+        <ImageWithFallback
+          src={imageSrc}
+          alt={product.name}
+          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+          style={product.localImg
+            ? { objectPosition: "center center" }
+            : undefined}
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/15 to-transparent pointer-events-none" />
+        {/* Veg dot + category pill — top-left */}
+        <div className="absolute top-3 left-3 flex items-center gap-2">
+          <VegDot />
+          <span className="text-[#1C1C1C] text-[10px] font-bold px-3 py-1 rounded-full tracking-widest leading-none" style={{ backgroundColor: "#FDD835" }}>
+            {product.categoryLabel}
+          </span>
+        </div>
+      </div>
+
+      {/* Content body */}
+      <div className="p-6 flex flex-col flex-1 gap-2">
+        <p className="text-[10px] font-bold tracking-[0.16em] text-muted-foreground uppercase">{categoryDisplayName(product.category)}</p>
+        <h3
+          className="font-bold text-foreground leading-snug cursor-pointer hover:text-[#1B4332] transition-colors"
+          style={{ fontFamily: "'Playfair Display', serif", fontSize: 21 }}
+          onClick={() => onNavigate("detail", product)}
+        >
+          {product.name}
+        </h3>
+        <p className="text-sm text-muted-foreground leading-relaxed flex-1">{product.shortDesc}</p>
+
+        {/* Oil / Ghee toggle — Karanji & Anarse only */}
+        {product.hasVariant && (
+          <div className="flex gap-2 mt-1">
+            {(["oil", "ghee"] as Variant[]).map(v => (
+              <button
+                key={v}
+                onClick={() => onVariantChange(v)}
+                className="flex-1 py-2 text-xs font-semibold rounded-full border transition-all"
+                style={{ backgroundColor: variant === v ? "#1B4332" : "transparent", color: variant === v ? "#fff" : "#1C1C1C", borderColor: variant === v ? "#1B4332" : "rgba(0,0,0,0.12)" }}
+              >
+                {v === "oil" ? "Refined Oil" : "Pure Ghee"}
+              </button>
+            ))}
+          </div>
+        )}
+
+        <div className="flex items-baseline gap-1 mt-1">
+          <span className="text-2xl font-bold" style={{ color: "#1B4332" }}>₹{price}</span>
+          <span className="text-sm text-muted-foreground">/ kg</span>
+        </div>
+
+        <button
+          onClick={() => onAddToCart(product.id)}
+          className="w-full text-white font-semibold rounded-full flex items-center justify-center gap-2 active:scale-[0.97] mt-1 transition-colors"
+          style={{ height: 50, fontSize: 15, backgroundColor: isAdded ? "#166534" : "#1B4332" }}
+        >
+          {isAdded ? <><Check size={17} />  Added!</> : <><ShoppingCart size={17} />  Add to Cart</>}
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// ── Header ────────────────────────────────────────────────────────────────────
+
+function Header({ cartCount, onNavigate, mobileOpen, setMobileOpen }: {
+  cartCount: number; onNavigate: NavigateFn; mobileOpen: boolean; setMobileOpen: (v: boolean) => void;
+}) {
+  return (
+    <header className="sticky top-0 z-50 bg-background/96 backdrop-blur-md border-b border-border">
+      <div className="max-w-7xl mx-auto px-5 py-2.5 flex items-center gap-4">
+        {/* Brand — real badge + wordmark */}
+        <button className="flex items-center gap-3 mr-4" onClick={() => onNavigate("home")}>
+          <LogoBadge size={52} />
+          <div className="leading-none text-left hidden sm:block">
+            <div className="text-[19px] font-bold text-foreground" style={{ fontFamily: "'Playfair Display', serif" }}>
+              Divekar Foods
+            </div>
+            <div className="text-[9px] tracking-[0.18em] text-muted-foreground uppercase">Homely Food is Good Food</div>
+          </div>
+        </button>
+
+        <nav className="hidden lg:flex items-center gap-6 flex-1">
+          {[
+            { label: "Home", p: "home" as Page }, { label: "Shop", p: "shop" as Page },
+            { label: "Categories", p: "shop" as Page }, { label: "About", p: "home" as Page },
+            { label: "FAQ", p: "home" as Page }, { label: "Contact", p: "home" as Page },
+          ].map(link => (
+            <button key={link.label} onClick={() => onNavigate(link.p)} className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors whitespace-nowrap">
+              {link.label}
+            </button>
+          ))}
+        </nav>
+
+        {/* Actions */}
+        <div className="flex items-center gap-3 ml-auto">
+          <button className="hidden md:flex text-muted-foreground hover:text-foreground transition-colors p-1"><Search size={20} /></button>
+          <button onClick={() => onNavigate("shop")} className="relative p-1">
+            <ShoppingCart size={22} className="text-foreground" />
+            {cartCount > 0 && (
+              <span className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full text-white text-[10px] font-bold flex items-center justify-center" style={{ backgroundColor: "#8BC34A" }}>
+                {cartCount}
+              </span>
+            )}
+          </button>
+          <button className="lg:hidden text-foreground p-1" onClick={() => setMobileOpen(!mobileOpen)}>
+            {mobileOpen ? <X size={22} /> : <Menu size={22} />}
+          </button>
+        </div>
+      </div>
+
+      {mobileOpen && (
+        <div className="lg:hidden bg-background border-t border-border px-5 py-4 flex flex-col gap-1">
+          {["Home", "Shop", "Categories", "About", "FAQ", "Contact"].map(item => (
+            <button
+              key={item}
+              onClick={() => { onNavigate(item === "Shop" || item === "Categories" ? "shop" : "home"); setMobileOpen(false); }}
+              className="text-left text-[15px] font-medium text-foreground py-2.5 border-b border-border/40 last:border-0"
+            >
+              {item}
+            </button>
+          ))}
+          <a href={buildWaURL(DEFAULT_WA_MSG)} target="_blank" rel="noopener noreferrer"
+            className="mt-2 flex items-center justify-center gap-2 text-white font-semibold py-3 rounded-full text-sm" style={{ backgroundColor: "#25D366" }}>
+            <MessageCircle size={16} /> Order on WhatsApp
+          </a>
+        </div>
+      )}
+    </header>
+  );
+}
+
+// ── Homepage ──────────────────────────────────────────────────────────────────
+
+function HomePage({ onNavigate, variantSelections, setVariantSelections, onAddToCart, addedToCart, testimonialIndex, setTestimonialIndex }: {
+  onNavigate: NavigateFn;
+  variantSelections: Record<number, Variant>;
+  setVariantSelections: React.Dispatch<React.SetStateAction<Record<number, Variant>>>;
+  onAddToCart: (id: number) => void; addedToCart: number | null;
+  testimonialIndex: number; setTestimonialIndex: React.Dispatch<React.SetStateAction<number>>;
+}) {
+  // Feature the three products we have authentic photos for
+  const featured = [
+    PRODUCTS.find(p => p.id === 14)!, // Bhajni Chakli
+    PRODUCTS.find(p => p.id === 19)!, // Sweet Shankarpali
+    PRODUCTS.find(p => p.id === 17)!, // Shev Che Ladoo
+  ];
+
+  return (
+    <main>
+      {/* ── Hero ── */}
+      <section className="bg-background py-14 px-5 md:py-20 overflow-hidden">
+        <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-10 lg:gap-16 items-center">
+          <div>
+            <div className="flex flex-wrap gap-2 mb-6">
+              <span className="text-xs font-semibold px-4 py-1.5 rounded-full" style={{ backgroundColor: "#E8F5E9", color: "#1B4332" }}>🌿 Handmade Ladoo, Faral & Diwali Sweets</span>
+              <span className="text-xs font-semibold px-4 py-1.5 rounded-full" style={{ backgroundColor: "#FFF8DC", color: "#7B5E00" }}>✨ Fresh, Made to Order</span>
+            </div>
+            <h1 className="text-4xl md:text-5xl lg:text-[3.4rem] font-bold text-foreground leading-[1.1] mb-5" style={{ fontFamily: "'Playfair Display', serif" }}>
+              The Taste of <span style={{ color: "#1B4332" }}>Aajobaanche</span> Gharche Fare
+            </h1>
+            <p className="text-base md:text-lg text-muted-foreground mb-8 max-w-md leading-relaxed">
+              Authentic Maharashtrian faral, jaggery ladoos and festive sweets, handcrafted in Magarpatta City, Pune since 2015. No preservatives. No shortcuts.
+            </p>
+            <div className="flex flex-wrap gap-3">
+              <button onClick={() => onNavigate("shop")} className="flex items-center gap-2 text-white font-semibold px-7 py-3.5 rounded-full transition-colors" style={{ backgroundColor: "#1B4332" }}
+                onMouseEnter={e => (e.currentTarget.style.backgroundColor = "#14532d")} onMouseLeave={e => (e.currentTarget.style.backgroundColor = "#1B4332")}>
+                Shop Now <ChevronRight size={18} />
+              </button>
+              <a href={buildWaURL(DEFAULT_WA_MSG)} target="_blank" rel="noopener noreferrer"
+                className="flex items-center gap-2 text-white font-semibold px-7 py-3.5 rounded-full" style={{ backgroundColor: "#25D366" }}>
+                <MessageCircle size={18} /> Order on WhatsApp
+              </a>
+            </div>
+          </div>
+
+          {/* Hero image — right column with real Bhajni Chakli photo inset panel */}
+          <div className="relative mt-6 md:mt-0">
+            <div className="rounded-2xl overflow-hidden bg-[#E8E2D0]" style={{ height: 460 }}>
+              <img src={UNSUNS.hero} alt="Homemade Maharashtrian festive sweets and faral platter" className="w-full h-full object-cover" />
+            </div>
+            <div className="absolute top-4 right-4 text-white text-xs font-bold px-4 py-2 rounded-full tracking-widest shadow-lg" style={{ backgroundColor: "#1B4332" }}>
+              ★ FEATURED TODAY
+            </div>
+            {/* Real product photo Bhajni Chakli card */}
+            <div className="absolute -bottom-4 -left-4 bg-card rounded-2xl overflow-hidden hidden md:flex items-center gap-3 p-3 pr-5" style={{ boxShadow: "0 8px 24px rgba(0,0,0,0.133)", width: 220 }}>
+              <div className="w-14 h-14 rounded-xl overflow-hidden bg-[#E8E2D0] flex-shrink-0">
+                <ImageWithFallback src={imgBhajniChakli} alt="Bhajni Chakli" className="w-full h-full object-cover" />
+              </div>
+              <div>
+                <p className="text-xs font-bold text-foreground" style={{ fontFamily: "'Playfair Display', serif" }}>Bhajni Chakli</p>
+                <p className="text-xs text-muted-foreground">Diwali Favourite</p>
+                <p className="text-sm font-bold mt-0.5" style={{ color: "#1B4332" }}>₹580 / kg</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Trust Stats ── */}
+      <section className="py-10 px-5 border-y border-border bg-card">
+        <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4">
+          {[
+            { icon: "🤲", title: "100% Handmade",     sub: "Every piece crafted with love" },
+            { icon: "🌿", title: "Zero Preservatives", sub: "Pure & natural ingredients only" },
+            { icon: "🥣", title: "Pure Desi Ghee",     sub: "Where the recipe calls for it" },
+            { icon: "🕐", title: "2-3 Day Lead Time",  sub: "Made fresh to your order" },
+          ].map(s => (
+            <div key={s.title} className="text-center p-5 rounded-xl bg-background">
+              <div className="text-3xl mb-2">{s.icon}</div>
+              <h3 className="font-bold text-foreground text-sm mb-0.5">{s.title}</h3>
+              <p className="text-xs text-muted-foreground">{s.sub}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ── Category Tiles ── */}
+      <section className="py-16 px-5">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-10">
+            <p className="text-[10px] font-bold tracking-[0.2em] uppercase mb-2" style={{ color: "#8BC34A" }}>Browse by Category</p>
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground" style={{ fontFamily: "'Playfair Display', serif" }}>What Are You Craving?</h2>
+          </div>
+          <div className="grid md:grid-cols-2 gap-6">
+            {/*/* LadooLadoos tiletile */}
+ — Unsplash */}
+           <bu<button
+              onCon onClick={()ick={() => => onNavigonNavigate("se("shop",op", undefdefined,ned, "l"ladoo")}
+)} clasN            classNamme="="relelativtive rourounded-2xl ded-2xl overflow-hiddenverflow-hidden groupoup text-lefttext-left bg-[#E8E2D0]bg-[#E8E2D0] cursocur-posor-pointnr"
+              style={{r hestyle={{ heightht: 290 }}
+            >
+              <img
+                src={UNS290 }}>
+              <img src={UNS.catLadoo}
+   }             alalt="Immunity L=doos"
+               className=Immunw-fullh-ull object-cover transition-transform duration-500 group-hovyscale-[1.04]"
+              />
+              <div className=Labsoute inset-0 bg-gradient-to-t from-black/70s vicla-black/20 to-transparent" />
+          sName="w-full    <dh-fulv classNam objec-cove=" transition-transform durabsolution-500  bottrom-0 left-0up-hove:scale-[1.04]" p-6">/>
+                <span className="text-[#1C1C1C]<div cex-[10px] font-bold px-3 py-1 roundassNamed-full=tracking-widabsolute inset mb-3 -0 bg-gradinline-block" style={{ bent-to-t from-black/70 iackgroundCo-blor:"#DD835" }}>
+                  LADOO
+                </span>
+                <h3 clck/20 to-tassName="text-white text-2xnsparfont-boldleading-ntight" />
+              <div clasName="abstyle={{ fontFamilyolte ottom-0 left-0 p-6"'Playf>
+ir Dsplay' serif" }}>
+                  Healt               <spy Immunty Laoos
+                </h3>
+               n <p clclassNssName="text-whme="text-[#1C1C1C]te/75 text-smtext-[10px] font-bt-1">Jaggery-based, no sugald px-3 py-13 rounded-full tracking-wides</p>
+             t mb-3 </div>
+nlin-block"              <div slssNyme="bsolutee={{ bop-4 rickght-4 w-9roundColor h-9#DD835" }}>ADOO</span>
+                <h3 className=text-white text-2xl bg-whont-bod leading-tight" style/20={{ fontFamily b'Playackdirop-b Display', serif" }}>Helur-smthy Immunity rounded-full flex itemLdoos-center</h3>
+ just               <p cfy-cenassName="text-white/75 text-sm mt-1">Jagger try-bansision-all d, nroup-hove sugar:bg-white/35"> — 13 varieties</p>
+             </div>
+                <ChevronRight size={18}   <div classNae="bsolute to-4 right-4 w-9 h-9 bg-white/20 bacolor="whikdrop-blur-sm rounded-full flex items-center justify-center group-hover:bg-white/35 trnsition-all"><ChevronRighte" /size{18} color="white" /></div>
+            </div>
+            <//button>
+>
+
+            {/*{/* FaralFaral tiletile —— rreal Bhajn Chakli phoo */ Bhajni Chakli photo */}
+         <button
+             <button onClick={() => onNavigate("shop", undefined, ""faraa"al")} className="relative rounded-2xl overflow-hidden group text-left bg-[#3A3A2A1AA1A] cursor-pointer" style={{ height: 290 }}>
+              <IImaageWithFallbackeWithFallbacksrc={imgBhjniChkliBhajniChakli} alt="Fes"Festivaval Faral and Swets" Faral and Sweets" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.04]" style={{ opacity: 0.85 }} style={{ opacity: 0.85 }}
+              />
+             <div className="absolute inset-0 bg-gradient-to-t from-black/755 via-black/20 to-transparent" />
+              <div className="absolute bottom-0 left-0 p-6">
+                <span className="text-[#1C1C1C] text-[10px] font-bold px-3 py-1 rounded-full tracking-widest mb-3 inline-block" style={{ backgroundColor: "#FDD835" }}>FARALFARAL</span>
+                <h3 className="text-white text-2xl font-bold leading-tight" style={{ fontFamily: "'Playfair Display', serif" }}>Festival Faral & Sweets</h3>
+                <p className="text-white/75 text-sm mt-1">Chakli, Chiwda, Karanji & more — 15 varieties</p>
+              </div>
+              <div className="absolute top-4 right-4 w-9 h-9 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center group-hover:bg-white/35 transition-all"><ChevronRight size={18} color="white" /></div>
+           </button>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Featured Products ── */}
+      <section className="py-16 px-5" style={{ backgroundColor: "#F5F3E8" }}>
+        <div className="max-w-7xl mx-auto">
+          <div className="flex items-end justify-between mb-10">
+            <div>
+              <p className="text-[10px] font-bold tracking-[0.2em] uppercase mb-2" style={{ color: "#8BC34A" }}>Bestsellers</p>
+              <h2 className="text-3xl md:text-4xl font-bold text-foreground" style={{ fontFamily: "'Playfair Display', serif" }}>Customer Favourites</h2>
+            </div>
+            <button onClick={() => onNavigate("shop")} className="hidden md:flex items-center gap-1 text-sm font-semibold hover:underline" style={{ color: "#1B4332" }}>
+              View All <ChevronRight size={16} />
+            </button>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {featured.map(product => (
+              <ProductCard key={product.id} product={product} variant={variantSelections[product.id] ?? "oil"}
+                onVariantChange={v => setVariantSelections(prev => ({ ...prev, [product.id]: v }))}
+                onAddToCart={onAddToCart} addedToCart={addedToCart} onNavigate={onNavigate} />
+            ))}
+          </div>
+          <div className="flex md:hidden justify-center mt-8">
+            <button onClick={() => onNavigate("shop")} className="flex items-center gap-2 text-white font-semibold px-7 py-3.5 rounded-full" style={{ backgroundColor: "#1B4332" }}>
+              View All Products <ChevronRight size={18} />
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* ── How to Order ── */}
+      <section className="py-16 px-5" style={{ backgroundColor: "#1B4332" }}>
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-12">
+            <p className="text-[10px] font-bold tracking-[0.2em] uppercase mb-2" style={{ color: "#8BC34A" }}>Simple & Easy</p>
+            <h2 className="text-3xl md:text-4xl font-bold text-white" style={{ fontFamily: "'Playfair Display', serif" }}>How to Order</h2>
+            <p className="text-white/65 mt-3 text-sm">All orders are placed via WhatsApp or phone. We prepare fresh just for you.</p>
+          </div>
+          <div className="grid md:grid-cols-3 gap-8 mb-12">
+            {[
+              { step: "01", icon: "🛒", title: "Choose Your Items",  desc: "Browse our collection and pick the ladoos, faral or chiwda you love." },
+              { step: "02", icon: "📱", title: "WhatsApp or Call Us", desc: "Message us at 9579702008 to confirm your order and delivery details." },
+              { step: "03", icon: "🎁", title: "Fresh in 2-3 Days",  desc: "We handcraft your order fresh and arrange delivery or pickup within 2-3 days." },
+            ].map(s => (
+              <div key={s.step} className="text-center">
+                <div className="w-16 h-16 rounded-full flex items-center justify-center text-3xl mx-auto mb-4" style={{ backgroundColor: "rgba(255,255,255,0.1)" }}>{s.icon}</div>
+                <div className="text-xs font-bold tracking-widest mb-2" style={{ color: "#8BC34A" }}>STEP {s.step}</div>
+                <h3 className="text-white font-bold text-lg mb-2">{s.title}</h3>
+                <p className="text-white/60 text-sm leading-relaxed">{s.desc}</p>
+              </div>
+            ))}
+          </div>
+          <div className="flex flex-wrap justify-center gap-4">
+            <a href={buildWaURL(DEFAULT_WA_MSG)} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-white font-bold px-8 py-4 rounded-full text-base" style={{ backgroundColor: "#25D366" }}>
+              <MessageCircle size={20} /> Order on WhatsApp
+            </a>
+            <a href="tel:9579702008" className="flex items-center gap-2 text-white font-semibold px-8 py-4 rounded-full text-base" style={{ backgroundColor: "rgba(255,255,255,0.14)" }}>
+              <Phone size={18} /> Call 9579702008
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Trust Row ── */}
+      <section className="py-12 px-5 bg-card border-y border-border">
+        <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
+          {[
+            { Icon: Leaf,    title: "Pure Ingredients",          desc: "No artificial colors, flavors or preservatives. Ever." },
+            { Icon: Package, title: "Made-to-Order Freshness",   desc: "Your order is made on the day we prepare it, not days before." },
+            { Icon: Award,   title: "Hygienic Handmade Process", desc: "Prepared in a clean home kitchen with love and care since 2015." },
+          ].map(({ Icon, title, desc }) => (
+            <div key={title} className="flex items-start gap-4">
+              <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0" style={{ backgroundColor: "#E8F5E9" }}>
+                <Icon size={22} style={{ color: "#8BC34A" }} />
+              </div>
+              <div>
+                <h4 className="font-bold text-foreground mb-1">{title}</h4>
+                <p className="text-sm text-muted-foreground">{desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ── Testimonials ── */}
+      <section className="py-16 px-5 bg-background">
+        <div className="max-w-3xl mx-auto">
+          <div className="text-center mb-10">
+            <p className="text-[10px] font-bold tracking-[0.2em] uppercase mb-2" style={{ color: "#8BC34A" }}>Customer Love</p>
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground" style={{ fontFamily: "'Playfair Display', serif" }}>What Our Customers Say</h2>
+          </div>
+          <div className="bg-card rounded-2xl p-8 md:p-10" style={{ boxShadow: "0 2px 20px rgba(0,0,0,0.06)" }}>
+            <StarRow rating={TESTIMONIALS[testimonialIndex].rating} />
+            <blockquote className="text-xl md:text-2xl text-foreground mt-5 mb-7 leading-relaxed italic" style={{ fontFamily: "'Playfair Display', serif" }}>
+              "{TESTIMONIALS[testimonialIndex].text}"
+            </blockquote>
+            <div>
+              <p className="font-bold text-foreground">{TESTIMONIALS[testimonialIndex].name}</p>
+              <p className="text-sm text-muted-foreground flex items-center gap-1 mt-0.5"><MapPin size={12} /> {TESTIMONIALS[testimonialIndex].location}</p>
+            </div>
+          </div>
+          <div className="flex items-center justify-center gap-3 mt-6">
+            <button onClick={() => setTestimonialIndex(i => (i - 1 + TESTIMONIALS.length) % TESTIMONIALS.length)}
+              className="w-10 h-10 rounded-full border border-border flex items-center justify-center transition-all"
+              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.backgroundColor = "#1B4332"; (e.currentTarget as HTMLElement).style.ccolor = "whitewhite"; (e.currentTarget as HTMLElement).style.borderCborderColor = "#1B4332#1B4332"; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.backgroundColor = ""; (e.currentTarget as HTMLElement).style.ccolor = ""; (e.currentTarget as HTMLElement).style.borderCborderColor = ""; }}>
+              <ChevronLeft size={18} />
+            </button>
+            {TESTIMONIALS.map((_, i) => (
+              <button key={i} onClick={() => setTestimonialIndex(i)} className="rounded-full transition-all self-center"
+                style={{ width: i === testimonialIndex ? 24 : 8, height: 8, backgroundColor: i === testimonialIndex ? "#1B4332" : "rgba(0,0,0,0.15)" }} />
+            ))}
+            <button onClick={() => setTestimonialIndex(i => (i + 1) % TESTIMONIALS.length)}
+              className="w-10 h-10 rounded-full border border-border flex items-center justify-center transition-all"
+              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.backgroundColor = "#1B4332"; (e.currentTarget as HTMLElement).style.ccolor = "whitewhite"; (e.currentTarget as HTMLElement).style.borderCborderColor = "#1B4332#1B4332"; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.backgroundColor = ""; (e.currentTarget as HTMLElement).style.ccolor = ""; (e.currentTarget as HTMLElement).style.borderCborderColor = ""; }}>
+              <ChevronRight size={18} />
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Bottom CTA Banner ── */}
+      <section className="py-16 px-5" style={{ backgroundColor: "#FDD835" }}>
+        <div className="max-w-4xl mx-auto text-center">
+          <h2 className="text-3xl md:text-5xl font-bold text-[#1C1C1C] mb-4 leading-tight" style={{ fontFamily: "'Playfair Display', serif" }}>
+            Give Something That Feels Homemade and Festive
+          </h2>
+          <p className="text-[#1C1C1C]/70 mb-8 text-base md:text-lg">Perfect for Diwali, weddings, housewarming, or simply a thoughtful gift from the heart.</p>
+          <div className="flex flex-wrap justify-center gap-4">
+            <button onClick={() => onNavigate("shop")} className="text-white font-bold px-8 py-4 rounded-full text-base" style={{ backgroundColor: "#1B4332" }}>
+              Shop Now
+            </button>
+            <a href={buildWaURL("Hello! I'd like to order a festive gift box from Divekar Foods.")} target="_blank" rel="noopener noreferrer"
+              className="flex items-center gap-2 font-bold px-8 py-4 rounded-full text-base bg-white text-[#1C1C1C]">
+              <MessageCircle size={18} /> Order a Gift Box
+            </a>
+          </div>
+        </div>
+      </section>
+    </main>
+  );
+}
+
+// ── Shop Page ─────────────────────────────────────────────────────────────────
+
+function ShopPage({ filterCategory, setFilterCategory, variantSelections, setVariantSelections, onAddToCart, addedToCart, onNavigate, searchQuery, setSearchQuery }: {
+  filterCategory: FilterCategory; setFilterCategory: (c: FilterCategory) => void;
+  variantSelections: Record<number, Variant>; setVariantSelections: React.Dispatch<React.SetStateAction<Record<number, Variant>>>;
+  onAddToCart: (id: number) => void; addedToCart: number | null; onNavigate: NavigateFn;
+  searchQuery: string; setSearchQuery: (q: string) => void;
+}) {
+  const filters: { label: string; value: FilterCategory }[] = [
+    { label: "All Products", value: "all" }, { label: "Immunity Ladoos", value: "ladoo" },
+    { label: "Faral & Sweets", value: "faral" }, { label: "Chiwda", value: "chiwda" }, { label: "Shev", value: "shev" },
+  ];
+
+  const filtered = PRODUCTS.filter(p => {
+    const matchCat = filterCategory === "all" || p.category === filterCategory;
+    const q = searchQuery.toLowerCase();
+    return matchCat &&(!q || p.name.toLowerCase().includes(q) || p.shortDesc);
+  });
+
+  return (
+    <main className="pb-24">
+      <div className="bg-background border-b border-border py-12 px-5">
+        <div className="max-w-7xl mx-auto">
+          <p className="text-[10px] font-bold tracking-[0.2em] uppercase mb-2" style={{ color: "#8BC34A" }}>Our Collection</p>
+          <h1 className="text-3xl md:text-4xl font-bold text-foreground" style={{ fontFamily: "'Playfair Display', serif" }}>Homemade Ladoo & Faral Collection</h1>
+          <p className="text-muted-foreground mt-2 max-w-xl">All items are jaggery-based (no refined sugar) where applicable, handcrafted fresh to order in 2-3 days.</p>
+        </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-5">
+        <div className="flex flex-col sm:flex-row gap-3 py-6 border-b border-border">
+          <div className="relative max-w-sm w-full">
+            <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted-foreground" />
+            <input value={searchQuery} onChange={e => setSearchQuery(e.target.value)} placeholder="Search ladoo, chakli, chiwda…"
+              className="w-full pl-10 pr-4 py-2.5 text-sm border border-border rounded-full bg-card focus:outline-none focus:border-[#1B4332] transition-colors" />
+          </div>
+          <select className="sm:ml-auto text-sm border border-border rounded-full px-5 py-2.5 bg-card focus:outline-none text-foreground cursor-pointer">
+            <option>Sort: Default</option><option>Price: Low to High</option><option>Price: High to Low</option><option>Name: A to Z</option>
+          </select>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-2 py-5">
+          {filters.map(f => (
+            <button key={f.value} onClick={() => setFilterCategory(f.value)} className="px-5 py-2 rounded-full text-sm font-semibold transition-all border"
+              style={{ backgroundColor: filterCategory === f.value ? "#1B4332" : "#fff", color: filterCategory === f.value ? "#fff" : "#6B6B6B", borderColor: filterCategory === f.value ? "#1B4332" : "rgba(0,0,0,0.1)" }}>
+              {f.label}
+            </button>
+          ))}
+          <span className="ml-auto text-sm text-muted-foreground font-medium">{filtered.length} {filtered.length === 1 ? "product" : "products"}</span>
+        </div>
+        {filtered.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {filtered.map(product => (
+              <ProductCard key={product.id} product={product} variant={variantSelections[product.id] ?? "oil"}
+                onVariantChange={v => setVariantSelections(prev => ({ ...prev, [product.id]: v }))}
+                onAddToCart={onAddToCart} addedToCart={addedToCart} onNavigate={onNavigate} />
+            ))}
+          </div>
+        ) : (
+          <div className="py-24 text-center">
+            <p className="text-lg text-muted-foreground mb-3">No products found</p>
+            <button onClick={() => { setFilterCategory("all"); setSearchQuery(""); }} className="text-sm font-semibold underline" style={{ color: "#1B4332" }}>Clear filters</button>
+          </div>
+        )}
+      </div>
+    </main>
+  );
+}
+
+// ── Product Detail Page ───────────────────────────────────────────────────────
+
+function ProductDetailPage({ product, variant, setVariant, weight, setWeight, onAddToCart, onNavigate, variantSelections, setVariantSelections, addedToCart }: {
+  product: Product; variant: Variant; setVariant: (v: Variant) => void;
+  weight: Weight; setWeight: (w: Weight) => void;
+  onAddToCart: (id: number) => void; onNavigate: NavigateFn;
+  variantSelections: Record<number, Variant>; setVariantSelections: React.Dispatch<React.SetStateAction<Record<number, Variant>>>;
+  addedToCart: number | null;
+}) {
+  const price = computePrice(product, variant);
+  const unitPrice = Math.round((price * weight) / 1000);
+  const isAdded = addedToCart === product.id;
+  const imageSrc = product.localImg ?? product.image;
+  const imageSrc = product.localImg ?? product.image;
+  const related = PRODUCTS.filter(p => p.category === product.category && p.id !== product.id).slice(0, 3);
+  const waMsg = `Hello! I'd like to order ${weight}g of ${product.name}${product.hasVariant ? ` (${variant === "oil" ? "Refined Oil" : "Pure Ghee"})` : ""} from Divekar Foods. Approx. tApprox. total: ₹${unitPrice}. Please confirm availability.`;
+
+  return (
+    <main className="pb-24">
+      <div className="max-w-7xl mx-auto px-5 py-4">
+        <nav className="flex items-center gap-2 text-sm text-muted-foreground">
+          <button onClick={() => onNavigate("home")} className="hover:text-foreground transition-colors">Home</button>
+          <ChevronRight size={14} />
+          <button onClick={() => onNavigate("shop")} className="hover:text-foreground transition-colors">Shop</button>
+          <ChevronRight size={14} />
+          <span className="text-foreground font-medium">{product.name}</span>
+        </nav>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-5">
+        <div className="grid md:grid-cols-2 gap-10 lg:gap-16 items-start">
+          {/* Image gallery */}
+          <div>
+            <div>
+            <div className="rounded-2xl overflow-hidden bg-[#E8E2D0]" style={{ height: 500 }}>
+                <IImageWithFallback src={maageWithFallbackeSrc} alt={product.name} className="w-full h-full object-cover" />
+              </div>
+            {related.some(p => imageSrc}
+                alt={p.localImg) && (
+              <div className="flex gap-3 mt-3">
+                {related.naflter(p => p.localImg).slice(0, 4).mp(p => (
+                  <button key={p.id} onClick={() => onNaviate("detail", p)}
+                cl      className="w-fussName="w-20 h-20 rounded-xll h-full objec overflow-hidden bg-[#E8E2D0] flex-shrink-0 border-2 border-t-cover"
+              />
+            </div>
+            rans/* Thumbnail strip — show related parent hover:border-[#1B4332] t photos if available */}
+            {relatedransitiosome(p => p.localImg) && (
+              <div className="flex gap-3 mt-3">
+                {related.filter(p => p.localImg).slice(0, 4).map(p => (
+                  <button
+                    key={p.id}
+                    onClick={() => onN-colors">vigat("detail", p)
+                          <ImageWithFallback src={p.localImg!} alt={p.name} className="w-20 h-20 rounded-xl overflow-hidden bg-[#E8E2D0] flex-shrink-0 border-2 border-transparent hover:border-[#1B4332] transition-colors"
+                  >
+                    <ImageWithFallback src={p.localImg!} alt={p.name} className="w-full h-full object-cover" /> />
+                        <</buttonbutton>
+                ))}
+              </div>
+            )}
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Details */}
+          <div className="py-2">
+            <div className="flex items-center gap-2 mb-3">
+              <VegDot />
+              <span className="text-[#1C1C1C] text-[10px] font-bold px-3 py-1 rounded-full tracking-widest" style={{ backgroundColor: "#FDD835" }}>{product.categoryLabel}</span>
+            </div>
+            <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-3 leading-tight" style={{ fontFamily: "'Playfair Display', serif" }}>{product.name}</h1>
+            <div className="flex items-center gap-2 mb-4"><StarRow rating={5} /><span className="text-xs text-muted-foreground">(Verified purchases)</span></div>
+            <p className="text-muted-foreground mb-5 leading-relaxed">{product.shortDesc}</p>
+
+            <div className="flex items-baseline gap-2 mb-6">
+              <span className="text-3xl font-bold" style={{ color: "#1B4332" }}>₹{price}</span>
+              <span className="text-muted-foreground">/ kg</span>
+              {weight !== 1000 && <span className="text-sm text-muted-foreground ml-2 font-medium">= ₹{unitPrice} for {weight}g</span>}
+            </div>
+
+            {product.hasVariant && (
+              <div className="mb-5">
+                <p className="text-sm font-semibold text-foreground mb-2">Cooking Medium</p>
+                <div className="flex gap-3">
+                  {(["oil", "ghee"] as Variant[]).map(v => (
+                    <button key={v} onClick={() => setVariant(v)} className="flex-1 py-3 text-sm font-semibold rounded-full border-2 transition-all"
+                      style={{ backgroundColor: variant === v ? "#1B4332" : "#fff", color: variant === v ? "#fff" : "#1C1C1C", borderColor: variant === v ? "#1B4332" : "rgba(0,0,0,0.12)" }}>
+                      {v === "oil" ? `Refined Oil — ₹${product.price}/kg` : `Pure Ghee — ₹${product.gheePrice}/kg`}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <div className="mb-6">
+              <p className="text-sm font-semibold text-foreground mb-2">Quantity</p>
+              <div className="flex gap-3">
+                {([250, 500, 1000] as Weight[]).map(w => (
+                  <button key={w} onClick={() => setWeight(w)} className="flex-1 py-3 text-sm font-semibold rounded-full border-2 transition-all"
+                    style={{ backgroundColor: weight === w ? "#1B4332" : "#fff", color: weight === w ? "#fff" : "#1C1C1C", borderColor: weight === w ? "#1B4332" : "rgba(0,0,0,0.12)" }}>
+                    {w === 1000 ? "1 kg" : `${w}g`}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="rounded-xl p-4 mb-5" style={{ backgroundColor: "#F5F3E8" }}>
+              <p className="text-[10px] font-bold tracking-[0.15em] uppercase mb-1" style={{ color: "#8BC34A" }}>Ingredients</p>
+              <p className="text-sm text-muted-foreground">{product.ingredients}</p>
+            </div>
+
+            <div className="flex items-start gap-3 rounded-xl p-4 mb-6" style={{ backgroundColor: "#FFF8DC" }}>
+              <Clock size={18} className="flex-shrink-0 mt-0.5" style={{ color: "#7B5E00" }} />
+              <p className="text-sm" style={{ color: "#7B5E00" }}>
+                <span className="font-semibold">2-3 day lead time:</span> All items are made fresh to order. We will confirm your delivery date over WhatsApp once you place the order.
+              </p>
+            </div>
+
+            <div className="flex flex-col sm:flex-row gap-3">
+              <button onClick={() => onAddToCart(product.id)} className="flex-1 flex items-center justify-center gap-2 text-white font-bold rounded-full py-4 transition-colors"
+                style={{ backgroundColor: isAdded ? "#166534" : "#1B4332" }}>
+                {isAdded ? <><Check size={18} /> Added!</> : <><ShoppingCart size={18} /> Add to Cart</>}
+              </button>
+              <a href={buildWaURL(waMsg)} target="_blank" rel="noopener noreferrer"
+                className="flex-1 flex items-center justify-center gap-2 text-white font-bold rounded-full py-4" style={{ backgroundColor: "#25D366" }}>
+                <MessageCircle size={18} /> Order on WhatsApp
+              </a>
+            </div>
+          </div>
+        </div>
+
+        {related.length > 0 && (
+          <div className="mt-20">
+            <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-8" style={{ fontFamily: "'Playfair Display', serif" }}>You Might Also Like</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {related.map(p => (
+                <ProductCard key={p.id} product={p} variant={variantSelections[p.id] ?? "oil"}
+                  onVariantChange={v => setVariantSelections(prev => ({ ...prev, [p.id]: v }))}
+                  onAddToCart={onAddToCart} addedToCart={addedToCart} onNavigate={onNavigate} />
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    </main>
+  );
+}
+
+// ── Footer ────────────────────────────────────────────────────────────────────
+
+function Footer({ onNavigate }: { onNavigate: NavigateFn }) {
+  return (
+    <footer className="bg-[#1C1C1C] text-white">
+      <div className="max-w-7xl mx-auto px-5 py-14">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+          <div>
+            <div className="flex items-center gap-3 mb-5">
+              <LogoBadge size={56} />
+              <div className="leading-none">
+                <div className="text-lg font-bold" style={{ fontFamily: "'Playfair Display', serif" }}>Divekar Foods</div><div className="text-[10px] tracking-wider text-white/45 uppercase mt-0.5">Homely Food is Good Food</div></div>
+            </div>
+            <p className="text-white/55 text-sm leading-relaxed mb-4">Homemade Maharashtrian faral, ladoos and festive sweets. Established 2015, Magarpatta City, Pune.</p>
+            <p className="text-xs text-white/30 italic">"Excellent Taste In Every Bite"</p>
+          </div>
+
+<div>
+            <h4 className="font-bold text-xs tracking-[0.15em] uppercase text-white/45 mb-4">Shop</h4>
+            <ul className="space-y-2 text-sm">
+              {["All Products", "Immunity Ladoos", "Faral & Sweets", "Chiwda", "Shev", "Gift Boxes"].map(link => (
+                <li key={link}><button onClick={() => onNavigate("shop")} className="text-white/65 hover:text-white transition-colors">{link}</button></li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="font-bold text-xs tracking-[0.15em] uppercase text-white/45 mb-4">Support</h4>
+            <ul className="space-y-2 text-sm">
+              {["About Us", "How to Order", "FAQ", "Contact Us", "Shipping Info", "Return Policy"].map(link => (
+                <li key={link}><button className="text-white/65 hover:text-white transition-colors text-left">{link}</button></li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="font-bold text-xs tracking-[0.15em] uppercase text-white/45 mb-4">Contact</h4>
+            <ul className="space-y-3 text-sm mb-7">
+              <li className="flex items-start gap-2 text-white/65"><MapPin size={14} className="mt-0.5 flex-shrink-0" style={{ color: "#8BC34A" }} />Magarpatta City, Pune, Maharashtra</li>
+              <li className="flex items-center gap-2 text-white/65"><Phone size={14}style={{ color: "#8BC34A" }} /><a href="tel:9579702008" className="hover:text-white transition-colors">9579702008</a></li>
+              <li className="flex items-center gap-2 text-white/65"><MessageCircle size={14} style={{ color: "#25D366" }} /><a href={buildWaURL(DEFAULT_WA_MSG)} target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">WhatsApp Us</a></li>
+            </ul>
+            <h4 className="font-bold text-xs tracking-[0.15em] uppercase text-white/45 mb-3">Newsletter</h4>
+            <div className="flex gap-2">
+              <input type="email" placeholder="your@email.com" className="flex-1 rounded-full px-4 py-2.5 text-sm text-white placeholder-white/35 focus:outline-none"
+                style={{ backgroundColor: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.18)" }} />
+              <button className="text-white text-sm font-semibold px-4 py-2.5 rounded-full" style={{ backgroundColor: "#8BC34A" }}>Go</button>
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-10 pt-6 border-t flex flex-col md:flex-row items-center justify-between gap-3 text-xs" style={{ borderColor: "rgba(255,255,255,0.1)", color: "rgba(255,255,255,0.35)" }}>
+          <p>© 2024 Divekar Foods. All rights reserved. Established 2015, Magarpatta City, Pune.</p>
+          <p>Made with ❤️ in Pune, Maharashtra</p>
+        </div>
+      </div>
+    </footer>
+  );
+}
+
+// ── Root App ──────────────────────────────────────────────────────────────────
+
+export default function App() {
+  const [page, setPage] = useState<Page>("home");
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [filterCategory, setFilterCategory] = useState<FilterCategory>("all");
+  const [cartCount, setCartCount] = useState(0);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [testimonialIndex, setTestimonialIndex] = useState(0);
+  const [variantSelections, setVariantSelections] = useState<Record<number, Variant>>({});
+  const [detailVariant, setDetailVariant] = useState<Variant>("oil");
+  const [detailWeight, setDetailWeight] = useState<Weight>(500);
+  const [addedToCart, setAddedToCart] = useState<number | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const navigateTo: NavigateFn = (p, product, filter) => {
+    setPage(p);
+    if (product) { setSelectedProduct(product); setDetailVariant("oil"); setDetailWeight(500); }
+    if (filter !== undefined) setFilterCategory(filter);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const handleAddToCart = (id: number) => {
+    setCartCount(c => c + 1);
+    setAddedToCart(id);
+    setTimeout(() => setAddedToCart(null), 1600);
+  };
+
+  return (
+    <div className="min-h-screen bg-background text-foreground" style={{ fontFamily: "'Poppins', sans-serif" }}>
+      <Header cartCount={cartCount} onNavigate={navigateTo} mobileOpen={mobileMenuOpen} setMobileOpen={setMobileMenuOpen} />
+
+      {page === "home" && (
+        <HomePage onNavigate={navigateTo} variantSelections={variantSelections} setVariantSelections={setVariantSelections}
+          onAddToCart={handleAddToCart} addedToCart={addedToCart} testimonialIndex={testimonialIndex} setTestimonialIndex={setTestimonialIndex} />
+      )}
+      {page === "shop" && (
+        <ShopPage filterCategory={filterCategory} setFilterCategory={setFilterCategory}
+          variantSelections={variantSelections} setVariantSelections={setVariantSelections}
+          onAddToCart={handleAddToCart} addedToCart={addedToCart} onNavigate={navigateTo}
+          searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+      )}
+      {page === "detail" && selectedProduct && (
+        <ProductDetailPage product={selectedProduct} variant={detailVariant} setVariant={setDetailVariant}
+          weight={detailWeight} setWeight={setDetailWeight} onAddToCart={handleAddToCart} onNavigate={navigateTo}
+          variantSelections={variantSelections} setVariantSelections={setVariantSelections} addedToCart={addedToCart} />
+      )}
+
+      <Footer onNavigate={navigateTo} />
+    </div>
+  );
+}

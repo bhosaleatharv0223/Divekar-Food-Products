@@ -1,0 +1,11 @@
+
+> @figma/my-make-file@0.0.1 dev
+> vite --host 127.0.0.1
+
+
+  VITE v6.3.5  ready in 1090 ms
+
+  ➜  Local:   http://127.0.0.1:5173/
+1:30:45 AM [vite] (client) hmr update /src/app/components/figma/ImageWithFallback.tsx, /src/styles/index.css
+1:39:53 AM [vite] vite.config.ts changed, restarting server...
+1:39:53 AM [vite] server restarted.
