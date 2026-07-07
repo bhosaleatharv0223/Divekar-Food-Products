@@ -7,6 +7,9 @@ import { LocationPicker } from "./LocationPicker";
 import { BillTemplate } from "./BillTemplate";
 import { uploadBillToCloudinary } from "./cloudinary";
 
+// Admin WhatsApp contact (single authoritative constant)
+const CONTACT_NUMBER = "919579702008";
+
 // ── Config ────────────────────────────────────────────────────────────────────
 // Checkout currently generates the bill and uploads it for review.
 
@@ -17,8 +20,7 @@ const STEP_LABELS = [
   "Your Details",
   "Location",
   "Confirm Bill",
-];
-
+];   
 function StepBar({ current }: { current: number }) {
   return (
     <div
@@ -90,7 +92,6 @@ function StepBar({ current }: { current: number }) {
     </div>
   );
 }
-
 // ── Brown CTA button ──────────────────────────────────────────────────────────
 function BrownButton({
   onClick,
@@ -268,6 +269,9 @@ export function CheckoutPage({ cartItems, onNavigateBack }: Props) {
     new Date().toLocaleDateString("en-IN", { day: "2-digit", month: "long", year: "numeric" })
   );
 
+  // waUrl holds the wa.me link for manual user click (fallback)
+  const [waUrl, setWaUrl] = useState<string | null>(null);
+
   const subtotal = cartItems.reduce((s, i) => s + i.unitPrice * i.qty, 0);
   const deliveryCharge = 0;
   const grandTotal = subtotal + deliveryCharge;
@@ -289,6 +293,11 @@ export function CheckoutPage({ cartItems, onNavigateBack }: Props) {
     if (!billRef.current || !location) return;
     setSubmitting(true);
     setSubmitError(null);
+
+    // Open a blank window synchronously so subsequent navigation is treated
+    // as a user-initiated action by the browser. If blocked, we'll show the
+    // visible fallback link in the success UI.
+    const whatsappWindow = window.open("", "_blank");
 
     try {
       // Stage 1: capture bill image
@@ -344,6 +353,43 @@ ${itemsText}
 📄 *Bill:* ${billUrl}`;
 
       console.log(message);
+
+      const builtWaUrl = `https://wa.me/${CONTACT_NUMBER}?text=${encodeURIComponent(message)}`;
+      setWaUrl(builtWaUrl);
+
+      if (whatsappWindow) {
+        try {
+          // First attempt a direct navigation.
+          whatsappWindow.location.href = builtWaUrl;
+          whatsappWindow.focus();
+
+          // Some browsers open the blank tab but block navigation. As a
+          // more robust fallback, write a tiny redirect page into the
+          // opened tab (same-origin about:blank allows this). The page
+          // contains a meta-refresh, a script-based replace, and a link
+          // so the user can manually proceed if needed.
+          setTimeout(() => {
+            try {
+              const loc = whatsappWindow.location && whatsappWindow.location.href;
+              if (!loc || loc === "about:blank") {
+                const safeUrl = builtWaUrl.replace(/"/g, '&quot;');
+                const html = `<!doctype html><html><head><meta charset=\"utf-8\"><meta http-equiv=\"refresh\" content=\"0;url=${safeUrl}\"><title>Open WhatsApp</title></head><body style=\"font-family:system-ui,Arial,sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;\"><div style=\"text-align:center;\"><p style=\"margin-bottom:12px;\">Opening WhatsApp…</p><a href=\"${safeUrl}\" style=\"display:inline-block;padding:12px 20px;border-radius:8px;background:#25D366;color:#fff;text-decoration:none;font-weight:700\">Open WhatsApp</a><script>setTimeout(function(){try{location.replace(${JSON.stringify(safeUrl)})}catch(e){/* ignore */}},100)</script></div></body></html>`;
+                whatsappWindow.document.open();
+                whatsappWindow.document.write(html);
+                whatsappWindow.document.close();
+              }
+            } catch (e) {
+              // ignore - writing may fail in some popup scenarios
+            }
+          }, 250);
+        } catch (navErr) {
+          console.warn("Could not navigate opened window:", navErr);
+          alert("Popup opened but could not navigate. Please click the WhatsApp button.");
+        }
+      } else {
+        alert("Popup was blocked. Please click the WhatsApp button to open the chat.");
+      }
+
       // TODO: submit the bill data to a backend or customer service workflow.
       setSubmitStage("Order submitted successfully.");
       setStep(6);
@@ -504,7 +550,6 @@ ${itemsText}
                     </p>
                   </div>
                 </Card>
-
                 <BrownButton onClick={() => setStep(2)}>
                   Proceed to Order →
                 </BrownButton>
@@ -749,6 +794,32 @@ ${itemsText}
               🕐 All orders are <strong>made fresh to order</strong>. Expect a 2–3 day preparation
               time before delivery.
             </div>
+            {waUrl && (
+              <div style={{ display: "flex", gap: 10, flexDirection: "column", alignItems: "center", marginTop: 12 }}>
+                <button
+                  onClick={() => waUrl && window.open(waUrl, "_blank")}
+                  style={{
+                    display: "inline-block",
+                    padding: "12px 20px",
+                    borderRadius: 999,
+                    background: "#25D366",
+                    color: "#fff",
+                    fontWeight: 700,
+                    textDecoration: "none",
+                    border: "none",
+                    cursor: "pointer",
+                  }}
+                >
+                  Open WhatsApp to send order
+                </button>
+                <div style={{ fontSize: 13, color: "#6B6B6B" }}>
+                  If the WhatsApp tab doesn't open, <button
+                    onClick={() => { navigator.clipboard?.writeText(waUrl); alert("WhatsApp link copied to clipboard."); }}
+                    style={{ background: "transparent", border: "none", color: "#1B4332", fontWeight: 700, cursor: "pointer" }}
+                  >click to copy the link</button> and open it manually.
+                </div>
+              </div>
+            )}
             <button
               onClick={onNavigateBack}
               style={{

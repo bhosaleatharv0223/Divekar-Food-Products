@@ -106,79 +106,79 @@ const PRODUCTS: Product[] = [
     id: 1, name: "Dink Ladoo", category: "ladoo", categoryLabel: "LADOO",
     shortDesc: "Gum resin & dry fruits — warming winter immunity boost",
     ingredients: "Gum resin (dink), jaggery, wheat flour, dry fruits, pure ghee, cardamom",
-    price: 650, image: UNSUNS.ladoo1, localImg: imgDinkLadoo
+    price: 1050, image: UNSUNS.ladoo1, localImg: imgDinkLadoo
   },
   {
     id: 2, name: "Khajur Dryfruit Ladoo", category: "ladoo", categoryLabel: "LADOO",
     shortDesc: "Premium Medjool dates blended with mixed dry fruits, no sugar added",
     ingredients: "Medjool dates, almonds, cashews, pistachios, walnuts, cardamom",
-    price: 1200, image: UNSUNS.ladoo2, localImg: imgDryFruitsLadoo
+    price: 1450, image: UNSUNS.ladoo2, localImg: imgDryFruitsLadoo
   },
   {
     id: 3, name: "Peanut Ladoo", category: "ladoo", categoryLabel: "LADOO",
     shortDesc: "Roasted peanuts & jaggery — simple, wholesome, protein-packed",
     ingredients: "Peanuts, jaggery, cardamom, dry coconut",
-    price: 480, image: UNSUNS.ladoo3, localImg: imgPeanutLadoo
+    price: 650, image: UNSUNS.ladoo3, localImg: imgPeanutLadoo
   },
   {
     id: 4, name: "Methi Dink Ladoo", category: "ladoo", categoryLabel: "LADOO",
     shortDesc: "Fenugreek seeds & gum resin — traditional post-delivery nourishment",
     ingredients: "Fenugreek seeds, gum resin, jaggery, wheat flour, ghee",
-    price: 700, image: UNSUNS.ladoo4, localImg: imgMethiLadoo
+    price: 1150, image: UNSUNS.ladoo4, localImg: imgMethiLadoo
   },
   {
     id: 5, name: "Aliv Ladoo", category: "ladoo", categoryLabel: "LADOO",
     shortDesc: "Garden cress seeds — iron-rich, powerful immunity booster",
     ingredients: "Aliv seeds, jaggery, dry coconut, ghee, cardamom",
-    price: 750, image: UNSUNS.ladoo1, localImg: imgAlivLadoo
+    price: 700, image: UNSUNS.ladoo1, localImg: imgAlivLadoo
   },
   {
     id: 6, name: "Moong Dal Ladoo", category: "ladoo", categoryLabel: "LADOO",
     shortDesc: "Yellow moong dal roasted with pure ghee",
     ingredients: "Yellow moong dal, jaggery, ghee, cardamom, dry coconut",
-    price: 550, image: UNSUNS.ladoo2, localImg: imgMoongDalLadoo
+    price: 850, image: UNSUNS.ladoo2, localImg: imgMoongDalLadoo
   },
   {
     id: 7, name: "Hirve Moong Ladoo", category: "ladoo", categoryLabel: "LADOO",
     shortDesc: "Green moong dal — protein-rich, light on the stomach",
     ingredients: "Green moong dal, jaggery, ghee, cardamom",
-    price: 580, image: UNSUNS.ladoo3, localImg: imgHirveMoongLadoo
+    price: 850, image: UNSUNS.ladoo3, localImg: imgHirveMoongLadoo
   },
   {
     id: 8, name: "Urad Dal Ladoo", category: "ladoo", categoryLabel: "LADOO",
     shortDesc: "Black gram with ghee — traditionally served for bone health",
     ingredients: "Urad dal, jaggery, ghee, cardamom, edible gum",
-    price: 520, image: UNSUNS.ladoo4, localImg: imgUradLadoo
+    price: 850, image: UNSUNS.ladoo4, localImg: imgUradLadoo
   },
   {
     id: 9, name: "Javas Ladoo", category: "ladoo", categoryLabel: "LADOO",
     shortDesc: "Flaxseeds — omega-3 rich, heart-healthy snack",
     ingredients: "Flaxseeds (javas), jaggery, dry coconut, cardamom",
-    price: 620, image: UNSUNS.ladoo1, localImg: imgJavasLadoo
+    price: 850, image: UNSUNS.ladoo1, localImg: imgJavasLadoo
   },
   {
     id: 10, name: "Nachni (Ragi) Ladoo", category: "ladoo", categoryLabel: "LADOO",
     shortDesc: "Finger millet with jaggery — calcium-rich, bone-strengthening",
     ingredients: "Ragi flour, jaggery, ghee, dry coconut, cardamom",
-    price: 500, image: UNSUNS.ladoo2, localImg: imgNachniLadoo
+    price: 850, image: UNSUNS.ladoo2, localImg: imgNachniLadoo
   },
   {
     id: 11, name: "Tilgud Ladoo", category: "ladoo", categoryLabel: "LADOO",
     shortDesc: "Sesame & jaggery — Makar Sankranti special, warming & nutritious",
     ingredients: "Sesame seeds, jaggery, ghee, cardamom",
-    price: 580, image: UNSUNS.ladoo3, localImg: imgTilgudLadoo
+    price: 650, image: UNSUNS.ladoo3, localImg: imgTilgudLadoo
   },
   {
     id: 12, name: "Paushtik Ladoo", category: "ladoo", categoryLabel: "LADOO",
     shortDesc: "Multi-grain nutritious blend — the ultimate health ladoo",
     ingredients: "Mixed grains, dry fruits, jaggery, ghee, cardamom",
-    price: 650, image: UNSUNS.ladoo4, localImg: imgPaushtikLadoo
+    price: 950, image: UNSUNS.ladoo4, localImg: imgPaushtikLadoo
   },
   {
     id: 13, name: "Wheat Ladoo", category: "ladoo", categoryLabel: "LADOO",
     shortDesc: "Whole wheat flour with pure ghee — classic Maharashtrian",
     ingredients: "Whole wheat flour, jaggery, ghee, cardamom",
-    price: 480, image: UNSUNS.ladoo1, localImg: imgWheatLadoo
+    price: 850, image: UNSUNS.ladoo1, localImg: imgWheatLadoo
   },
 
 
@@ -187,67 +187,67 @@ const PRODUCTS: Product[] = [
     id: 14, name: "Bhajni Chakli", category: "faral", categoryLabel: "FARAL",
     shortDesc: "Crispy spiral snack from mixed flour — Diwali essential",
     ingredients: "Mixed flour blend, sesame seeds, cumin, carom seeds, butter",
-    price: 580, image: UNSUNS.snack1, localImg: imgChakali, featured: true
+    price: 650, image: UNSUNS.snack1, localImg: imgChakali, featured: true
   },
   {
     id: 15, name: "Rawa Ladoo", category: "faral", categoryLabel: "LADOO",
     shortDesc: "Semolina & coconut ladoo — a quick-prep festive classic",
     ingredients: "Semolina, coconut, sugar, ghee, cardamom, cashews",
-    price: 520, image: UNSUNS.ladoo3, localImg: imgRawaLadoo
+    price: 600, image: UNSUNS.ladoo3, localImg: imgRawaLadoo
   },
   {
     id: 16, name: "Bundi Ladoo", category: "faral", categoryLabel: "LADOO",
     shortDesc: "Tiny besan boondi spheres rolled in sugar syrup with saffron",
     ingredients: "Besan, sugar, ghee, saffron, cardamom, cloves",
-    price: 580, image: UNSUNS.ladoo4, localImg: imgBundiLadoo
+    price: 650, image: UNSUNS.ladoo4, localImg: imgBundiLadoo
   },
   {
     id: 17, name: "Shev Che Ladoo", category: "faral", categoryLabel: "LADOO",
     shortDesc: "Crispy sev bound with pure ghee — uniquely textured & satisfying",
     ingredients: "Besan sev, jaggery, ghee, sesame, cardamom",
-    price: 550, image: UNSUNS.snack2, localImg: imgShevLadooPublic, featured: true
+    price: 600, image: UNSUNS.snack2, localImg: imgShevLadooPublic, featured: true
   },
   {
     id: 18, name: "Besan Ladoo", category: "faral", categoryLabel: "LADOO",
     shortDesc: "Slow-roasted chickpea flour with ghee & sugar — melt-in-mouth",
     ingredients: "Besan, sugar, pure ghee, cardamom, almonds",
-    price: 520, image: UNSUNS.ladoo2, localImg: imgBesanLadoo
+    price: 750, image: UNSUNS.ladoo2, localImg: imgBesanLadoo
   },
   {
     id: 19, name: "Sweet Shankarpali", category: "faral", categoryLabel: "FARAL",
     shortDesc: "Diamond-cut pastry, subtly sweet & melt-in-your-mouth crispy",
     ingredients: "Wheat flour, sugar, ghee, cardamom, milk",
-    price: 500, image: UNSUNS.snack1, localImg: imgShankarpaliPublic, featured: true
+    price: 580, image: UNSUNS.snack1, localImg: imgShankarpaliPublic, featured: true
   },
   {
     id: 20, name: "Namkin Shankarpali", category: "faral", categoryLabel: "FARAL",
     shortDesc: "Savory crispy diamond pastry — perfect with a hot cup of chai",
     ingredients: "Wheat flour, butter, carom seeds, sesame, salt, chilli",
-    price: 480, image: UNSUNS.snack2, localImg: imgNamkinShankarpali
+    price: 580, image: UNSUNS.snack2, localImg: imgNamkinShankarpali
   },
   {
     id: 21, name: "Wheat Mathri", category: "faral", categoryLabel: "FARAL",
     shortDesc: "Whole wheat crispy crackers — healthier, rustic, flaky",
     ingredients: "Whole wheat flour, carom seeds, ghee, salt, pepper",
-    price: 480, image: UNSUNS.snack1, localImg: imgWheatMathriPublic
+    price: 600, image: UNSUNS.snack1, localImg: imgWheatMathriPublic
   },
   {
     id: 22, name: "Pudachi Karanji", category: "faral", categoryLabel: "FARAL",
     shortDesc: "Coconut-filled crescent pastry — Diwali favourite, price varies by medium",
     ingredients: "Wheat flour, dry coconut, sugar, cardamom, sesame",
-    price: 580, gheePrice: 750, image: UNSUNS.snack2, localImg: imgPudachiKaranjiPublic, hasVariant: true
+    price: 680, gheePrice: 900, image: UNSUNS.snack2, localImg: imgPudachiKaranjiPublic, hasVariant: true
   },
   {
     id: 23, name: "Chirote", category: "faral", categoryLabel: "FARAL",
     shortDesc: "Layered sweet puff pastry, dusted with powdered sugar",
     ingredients: "All-purpose flour, ghee, sugar, cardamom, saffron",
-    price: 620, image: UNSUNS.snack2, localImg: imgChirote
+    price: 650, image: UNSUNS.snack2, localImg: imgChirote
   },
   {
     id: 24, name: "Anarse", category: "faral", categoryLabel: "FARAL",
     shortDesc: "Traditional Diwali sesame rice cookies — delicate, melt-away",
     ingredients: "Rice flour, sesame seeds, jaggery, ghee or refined oil",
-    price: 650, gheePrice: 850, image: UNSUNS.snack1, localImg: imgAnarsePublic, hasVariant: true
+    price: 680, gheePrice: 900, image: UNSUNS.snack1, localImg: imgAnarsePublic, hasVariant: true
   },
 
 
@@ -256,19 +256,19 @@ const PRODUCTS: Product[] = [
     id: 25, name: "Patal Poha Chiwda", category: "chiwda", categoryLabel: "CHIWDA",
     shortDesc: "Thin flattened rice mixture — light, crunchy & addictive",
     ingredients: "Thin poha, peanuts, curry leaves, mustard seeds, turmeric, sugar",
-    price: 520, image: UNSUNS.snack2, localImg: imgPatalPohaChivda
+    price: 550, image: UNSUNS.snack2, localImg: imgPatalPohaChivda
   },
   {
     id: 26, name: "Corn Poha Chivda", category: "chiwda", categoryLabel: "CHIWDA",
     shortDesc: "Corn puffs mixture — light, crunchy everyday snack",
     ingredients: "Corn puffs, peanuts, dry coconut, curry leaves, spices",
-    price: 500, image: UNSUNS.snack1, localImg: imgCornPohaChivda
+    price: 520, image: UNSUNS.snack1, localImg: imgCornPohaChivda
   },
   {
     id: 27, name: "Bhadang Chiwda", category: "chiwda", categoryLabel: "CHIWDA",
     shortDesc: "Spiced puffed rice — Kolhapur-style street food crunch",
     ingredients: "Puffed rice, peanuts, dried onion, spices, curry leaves",
-    price: 480, image: UNSUNS.snack2, localImg: imgBhadangChiwda
+    price: 520, image: UNSUNS.snack2, localImg: imgBhadangChiwda
   },
 
 
@@ -284,7 +284,7 @@ const PRODUCTS: Product[] = [
     id: 28, name: "Lasun Shev", category: "shev", categoryLabel: "SHEV",
     shortDesc: "Garlic-flavored crispy sev — bold, aromatic, utterly moreish",
     ingredients: "Besan flour, garlic, carom seeds, red chilli, oil",
-    price: 500, image: UNSUNS.snack2, localImg: imgLasunShev
+    price: 480, image: UNSUNS.snack2, localImg: imgLasunShev
   },
 ];
 
