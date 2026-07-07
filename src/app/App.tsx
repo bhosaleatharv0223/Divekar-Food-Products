@@ -15,12 +15,6 @@ import type { CartItem as CheckoutCartItem } from "./checkout/types";
 import imgLogo from "../imports/ChatGPT_Image_Jul_4__2026__04_42_01_PM.png";
 
 // ── Real product photos ───────────────────────────────────────────────────────
-import hero1 from "../imports/ChatGPT_Image_Jul_4__2026__05_42_42_PM.png";
-import hero2 from "../imports/ChatGPT_Image_Jul_4__2026__05_46_55_PM.png";
-import hero3 from "../imports/ChatGPT_Image_Jul_4__2026__05_49_57_PM.png";
-import hero4 from "../imports/ChatGPT_Image_Jul_4__2026__05_54_56_PM.png";
-import hero5 from "../imports/ChatGPT_Image_Jul_4__2026__05_52_49_PM.png";
-
 const imgAlivLadoo = "/Aliv%20laddu.png";
 const imgWheatMathriPublic = "/Anarase.png";
 const imgBesanLadoo = "/Bessen%20laddo.png";
@@ -51,7 +45,12 @@ const imgBhadangChiwda = "/bhadang chiwada.png";
 const imgNamkinShankarpali = "/1000324538.jpg";
 const imgChirote = "/1000324543.jpg";
 
-const HERO_IMAGES = [hero1, hero2, hero3, hero4, hero5];
+const HERO_IMAGES = [
+  "/ChatGPT Image Jul 6, 2026, 06_17_04 PM.png",
+  "/ChatGPT Image Jul 6, 2026, 06_15_19 PM.png",
+  "/ChatGPT Image Jul 6, 2026, 06_11_32 PM.png",
+  "/ChatGPT Image Jul 6, 2026, 06_05_06 PM.png",
+];
 
 // ── Types ──────────────────────────────────────────────────────────────────────
 
@@ -105,7 +104,7 @@ const PRODUCTS: Product[] = [
   // ── Immunity Ladoos ────────────────────────────────────────────────────────
   {
     id: 1, name: "Dink Ladoo", category: "ladoo", categoryLabel: "LADOO",
-    shortDesc: "Jaggery, gum resin & dry fruits — warming winter immunity boost",
+    shortDesc: "Gum resin & dry fruits — warming winter immunity boost",
     ingredients: "Gum resin (dink), jaggery, wheat flour, dry fruits, pure ghee, cardamom",
     price: 650, image: UNSUNS.ladoo1, localImg: imgDinkLadoo
   },
@@ -135,7 +134,7 @@ const PRODUCTS: Product[] = [
   },
   {
     id: 6, name: "Moong Dal Ladoo", category: "ladoo", categoryLabel: "LADOO",
-    shortDesc: "Yellow moong dal roasted with jaggery & pure ghee",
+    shortDesc: "Yellow moong dal roasted with pure ghee",
     ingredients: "Yellow moong dal, jaggery, ghee, cardamom, dry coconut",
     price: 550, image: UNSUNS.ladoo2, localImg: imgMoongDalLadoo
   },
@@ -153,7 +152,7 @@ const PRODUCTS: Product[] = [
   },
   {
     id: 9, name: "Javas Ladoo", category: "ladoo", categoryLabel: "LADOO",
-    shortDesc: "Flaxseeds with jaggery — omega-3 rich, heart-healthy snack",
+    shortDesc: "Flaxseeds — omega-3 rich, heart-healthy snack",
     ingredients: "Flaxseeds (javas), jaggery, dry coconut, cardamom",
     price: 620, image: UNSUNS.ladoo1, localImg: imgJavasLadoo
   },
@@ -177,7 +176,7 @@ const PRODUCTS: Product[] = [
   },
   {
     id: 13, name: "Wheat Ladoo", category: "ladoo", categoryLabel: "LADOO",
-    shortDesc: "Whole wheat flour with pure ghee & jaggery — classic Maharashtrian",
+    shortDesc: "Whole wheat flour with pure ghee — classic Maharashtrian",
     ingredients: "Whole wheat flour, jaggery, ghee, cardamom",
     price: 480, image: UNSUNS.ladoo1, localImg: imgWheatLadoo
   },
@@ -204,7 +203,7 @@ const PRODUCTS: Product[] = [
   },
   {
     id: 17, name: "Shev Che Ladoo", category: "faral", categoryLabel: "LADOO",
-    shortDesc: "Crispy sev bound with jaggery — uniquely textured & satisfying",
+    shortDesc: "Crispy sev bound with pure ghee — uniquely textured & satisfying",
     ingredients: "Besan sev, jaggery, ghee, sesame, cardamom",
     price: 550, image: UNSUNS.snack2, localImg: imgShevLadooPublic, featured: true
   },
@@ -562,20 +561,44 @@ function HomePage({ onNavigate, variantSelections, setVariantSelections, testimo
     PRODUCTS.find(p => p.id === 19) ?? PRODUCTS[0], // Sweet Shankarpali
     PRODUCTS.find(p => p.id === 17) ?? PRODUCTS[0], // Shev Che Ladoo
   ];
+  const quickShopProducts = [
+    PRODUCTS.find(p => p.id === 14) ?? PRODUCTS[0],
+    PRODUCTS.find(p => p.id === 29) ?? PRODUCTS[0],
+    PRODUCTS.find(p => p.id === 19) ?? PRODUCTS[0],
+    PRODUCTS.find(p => p.id === 1) ?? PRODUCTS[0],
+  ];
 
   return (
     <main>
       {/* ── Hero ── */}
-      <section className="bg-background py-14 px-5 md:py-20 overflow-hidden">
-        <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-10 lg:gap-16 items-center">
-          <div className="relative -top-10 md:-top-16">
-            <h1 className="text-4xl md:text-5xl lg:text-[3.4rem] font-bold text-foreground leading-[1.1] mb-5" style={{ fontFamily: "'Playfair Display', serif" }}>
-              Traditional Maharashtrian <span style={{ color: "#1B4332" }}>Faral, Ladoo &amp; Diwali Snacks</span>
+      <section className="relative overflow-hidden bg-background py-6 px-5 md:py-10">
+        <div className="absolute inset-0">
+          {HERO_IMAGES.map((image, index) => (
+            <img
+              key={image}
+              src={image}
+              loading="lazy"
+              alt="Homemade Maharashtrian festive sweets and faral platter"
+              aria-hidden={index !== activeHeroIndex}
+              className={`absolute inset-0 h-full w-full object-cover object-[center_30%] transition-opacity duration-1000 ease-in-out motion-reduce:transition-none md:object-center lg:object-right ${index === activeHeroIndex ? "opacity-100" : "opacity-0"}`}
+            />
+          ))}
+          <div
+            className="absolute inset-0"
+            style={{ background: "linear-gradient(to right, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.38) 45%, rgba(0,0,0,0.12) 100%)" }}
+            aria-hidden="true"
+          />
+        </div>
+
+        <div className="relative z-10 mx-auto flex min-h-[360px] max-w-7xl flex-col justify-start gap-8 pt-8 pb-10 sm:min-h-[420px] md:min-h-[460px] lg:min-h-[520px] lg:pt-12 lg:pb-14">
+          <div className="max-w-2xl">
+            <h1 className="mb-5 text-4xl font-bold leading-[1.1] text-white md:text-5xl lg:text-[3.4rem]" style={{ fontFamily: "'Playfair Display', serif" }}>
+              Traditional Maharashtrian <span style={{ color: "#E8F5E9" }}>Diwali Faral, Ladoo &amp; Snacks</span>
             </h1>
-            <p className="text-base md:text-lg text-muted-foreground mb-8 max-w-md leading-relaxed">
+            <p className="mb-8 max-w-md text-base leading-relaxed text-white/90 md:text-lg">
               Experience authentic Maharashtrian Faral handcrafted in Pune since 2015. Fresh Ladoo, Karanji, Chakli, Chivda, and festive sweets made using traditional family recipes with no preservatives.
             </p>
-            <div className="flex flex-col sm:flex-row sm:items-center sm:flex-wrap gap-3">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:flex-wrap">
               <button
                 type="button"
                 onClick={() => onNavigate("shop")}
@@ -593,42 +616,61 @@ function HomePage({ onNavigate, variantSelections, setVariantSelections, testimo
             </div>
           </div>
 
-          {/* Hero image — right column with real Bhajni Chakli photo inset panel */}
-          <div className="relative mt-6 md:-top-16 md:mt-0">
-            <div className="relative rounded-2xl overflow-hidden bg-[#E8E2D0] h-[360px] sm:h-[420px] md:h-[460px] lg:h-[520px]">
-              {HERO_IMAGES.map((image, index) => (
-                <img
-                  key={image}
-                  src={image}
-                  loading="lazy"
-                  alt="Homemade Maharashtrian festive sweets and faral platter"
-                  aria-hidden={index !== activeHeroIndex}
-                  className={`absolute inset-0 h-full w-full object-cover object-[center_30%] transition-opacity duration-500 ease-in-out motion-reduce:transition-none md:object-center lg:object-right ${index === activeHeroIndex ? "opacity-100" : "opacity-0"
-                    }`}
-                />
+          <div className="absolute right-4 top-1 z-20 text-white text-xs font-bold px-4 py-2 rounded-full tracking-widest shadow-lg" style={{ backgroundColor: "#1B4332" }}>
+            ★ FEATURED TODAY
+          </div>
+        </div>
+
+        <div className="mx-auto mt-1 max-w-7xl md:mt-2">
+          <div className="mb-2 flex items-center justify-center text-center">
+            <div className="relative z-10 inline-flex items-center gap-3 rounded-full bg-black/70 px-6 py-2 text-[11px] uppercase tracking-widest text-white font-semibold shadow-sm shadow-black/20">
+              <span className="h-px w-6 bg-[#D4AF37]" aria-hidden="true" />
+              <span className="font-semibold" style={{ fontFamily: "'Playfair Display', serif", color: '#D4AF37' }}>Explore the Collection</span>
+              <span className="h-px w-6 bg-[#D4AF37]" aria-hidden="true" />
+            </div>
+          </div>
+          <div className="mb-2">
+            <p className="text-[10px] font-bold uppercase tracking-[0.2em]" style={{ color: "#8BC34A" }}>Quick Shop</p>
+            <h3 className="text-lg font-bold text-foreground sm:text-xl" style={{ fontFamily: "'Playfair Display', serif" }}>Popular picks</h3>
+          </div>
+          <style>{`
+            @keyframes scroll {
+              from { transform: translateX(0); }
+              to { transform: translateX(-50%); }
+            }
+            .quick-shop-track {
+              animation: scroll 60s linear infinite;
+            }
+            .quick-shop-track:hover {
+              animation-play-state: paused;
+            }
+          `}</style>
+          <div className="overflow-hidden rounded-2xl border border-border/60 bg-card/60 p-3 shadow-sm sm:p-4">
+            <div className="quick-shop-track flex w-max gap-3" aria-label="All products">
+              {[...PRODUCTS, ...PRODUCTS].map((product, index) => (
+                <button
+                  key={`${product.id}-${index}`}
+                  type="button"
+                  onClick={() => onNavigate("detail", product)}
+                  className="group relative w-64 shrink-0 overflow-hidden rounded-2xl border border-border bg-card shadow-sm transition-all hover:-translate-y-0.5 hover:border-[#1B4332]/30 hover:shadow-md"
+                >
+                  <div className="relative h-28 overflow-hidden sm:h-32">
+                    <ImageWithFallback src={product.localImg ?? product.image} alt={product.name} className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+                    <div className="absolute bottom-2 right-2 rounded-full bg-white/90 px-2.5 py-1 text-[11px] font-bold text-[#1B4332] shadow-sm">
+                      ₹{product.price}/kg
+                    </div>
+                  </div>
+                  <div className="p-3 text-left">
+                    <p className="truncate text-sm font-bold text-foreground" style={{ fontFamily: "'Playfair Display', serif" }}>{product.name}</p>
+                    <p className="mt-1 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">{product.categoryLabel}</p>
+                  </div>
+                </button>
               ))}
-              <div
-                className="absolute inset-0 z-[1]"
-                style={{ background: "linear-gradient(to right, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.1) 60%)" }}
-                aria-hidden="true"
-              />
-            </div>
-            <div className="absolute top-4 right-4 z-10 text-white text-xs font-bold px-4 py-2 rounded-full tracking-widest shadow-lg" style={{ backgroundColor: "#1B4332" }}>
-              ★ FEATURED TODAY
-            </div>
-            {/* Real product photo Bhajni Chakli card */}
-            <div className="absolute -bottom-4 -left-4 z-10 bg-card rounded-2xl overflow-hidden hidden md:flex items-center gap-3 p-3 pr-5 shadow-[0_8px_24px_rgba(0,0,0,0.133)] w-[220px]">
-              <div className="w-14 h-14 rounded-xl overflow-hidden bg-[#E8E2D0] flex-shrink-0">
-                <ImageWithFallback src={imgChakali} alt="Bhajni Chakli" className="w-full h-full object-cover" />
-              </div>
-              <div>
-                <p className="text-xs font-bold text-foreground" style={{ fontFamily: "'Playfair Display', serif" }}>Bhajni Chakli</p>
-                <p className="text-xs text-muted-foreground">Diwali Favourite - Min. 500g</p>
-                <p className="text-sm font-bold mt-0.5" style={{ color: "#1B4332" }}>₹580 / kg</p>
-              </div>
             </div>
           </div>
         </div>
+
         <div className="max-w-7xl mx-auto -mt-2 md:-mt-10">
           <div className="mb-4 flex items-center justify-between gap-4">
             <div>
@@ -690,6 +732,26 @@ function HomePage({ onNavigate, variantSelections, setVariantSelections, testimo
             <h2 className="text-3xl md:text-4xl font-bold text-foreground" style={{ fontFamily: "'Playfair Display', serif" }}>What Are You Craving?</h2>
           </div>
           <div className="grid md:grid-cols-2 gap-6">
+            {/* Faral tile � real Bhajni Chakli photo */}
+            <button
+              onClick={() => onNavigate("shop", undefined, "faral")}
+              className="relative rounded-2xl overflow-hidden group text-left bg-[#3A2A1A] cursor-pointer h-[280px] sm:h-[290px]"
+            >
+              <ImageWithFallback
+                src={imgChakali}
+                alt="Festival Faral and Sweets"
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+                style={{ opacity: 0.85 }}
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent" />
+              <div className="absolute bottom-0 left-0 p-6">
+                <span className="text-[#1C1C1C] text-[10px] font-bold px-3 py-1 rounded-full tracking-widest mb-3 inline-block" style={{ backgroundColor: "#FDD835" }}>FARAL</span>
+                <h3 className="text-white text-2xl font-bold leading-tight" style={{ fontFamily: "'Playfair Display', serif" }}>Festival Faral & Sweets</h3>
+                <p className="text-white/75 text-sm mt-1">Chakli, Chiwda, Karanji & more � 15 varieties</p>
+              </div>
+              <div className="absolute top-4 right-4 w-9 h-9 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center group-hover:bg-white/35 transition-all"><ChevronRight size={18} color="white" /></div>
+            </button>
+
             {/* Ladoo tile � Unsplash */}
             <button
               onClick={() => onNavigate("shop", undefined, "ladoo")}
@@ -708,27 +770,7 @@ function HomePage({ onNavigate, variantSelections, setVariantSelections, testimo
                 <h3 className="text-white text-2xl font-bold leading-tight" style={{ fontFamily: "'Playfair Display', serif" }}>
                   Healthy Immunity Ladoos
                 </h3>
-                <p className="text-white/75 text-sm mt-1">Jaggery-based, no sugar � 13 varieties</p>
-              </div>
-              <div className="absolute top-4 right-4 w-9 h-9 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center group-hover:bg-white/35 transition-all"><ChevronRight size={18} color="white" /></div>
-            </button>
-
-            {/* Faral tile � real Bhajni Chakli photo */}
-            <button
-              onClick={() => onNavigate("shop", undefined, "faral")}
-              className="relative rounded-2xl overflow-hidden group text-left bg-[#3A2A1A] cursor-pointer h-[280px] sm:h-[290px]"
-            >
-              <ImageWithFallback
-                src={imgChakali}
-                alt="Festival Faral and Sweets"
-                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
-                style={{ opacity: 0.85 }}
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent" />
-              <div className="absolute bottom-0 left-0 p-6">
-                <span className="text-[#1C1C1C] text-[10px] font-bold px-3 py-1 rounded-full tracking-widest mb-3 inline-block" style={{ backgroundColor: "#FDD835" }}>FARAL</span>
-                <h3 className="text-white text-2xl font-bold leading-tight" style={{ fontFamily: "'Playfair Display', serif" }}>Festival Faral & Sweets</h3>
-                <p className="text-white/75 text-sm mt-1">Chakli, Chiwda, Karanji & more � 15 varieties</p>
+                <p className="text-white/75 text-sm mt-1">No sugar � 13 varieties</p>
               </div>
               <div className="absolute top-4 right-4 w-9 h-9 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center group-hover:bg-white/35 transition-all"><ChevronRight size={18} color="white" /></div>
             </button>
@@ -933,7 +975,7 @@ function ShopPage({ filterCategory, setFilterCategory, variantSelections, setVar
         <div className="max-w-7xl mx-auto">
           <p className="text-[10px] font-bold tracking-[0.2em] uppercase mb-2" style={{ color: "#8BC34A" }}>Our Collection</p>
           <h1 className="text-3xl md:text-4xl font-bold text-foreground" style={{ fontFamily: "'Playfair Display', serif" }}>Homemade Ladoo & Faral Collection</h1>
-          <p className="text-muted-foreground mt-2 max-w-xl">All items are jaggery-based (no refined sugar) where applicable, handcrafted fresh to order in 2-3 days.</p>
+          <p className="text-muted-foreground mt-2 max-w-xl">Authentic homemade Maharashtrian snacks and sweets, freshly prepared after your order using premium ingredients.</p>
         </div>
       </div>
 
