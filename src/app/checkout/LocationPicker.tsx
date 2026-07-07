@@ -19,7 +19,7 @@ L.Icon.Default.mergeOptions({
 // Dynamic import of react-leaflet to avoid SSR issues in Vite
 import { MapContainer, TileLayer, Marker, useMapEvents, useMap } from "react-leaflet";
 
-const DEFAULT_CENTER: [number, number] = [18.5204, 73.8567]; // Pune, Maharashtra
+const DEFAULT_CENTER: [number, number] = [18.51770336, 73.93088147]; // Roystonea Gate, Pune, Maharashtra
 
 function buildMapsLink(lat: number, lng: number) {
   return `https://www.google.com/maps?q=${lat.toFixed(6)},${lng.toFixed(6)}`;

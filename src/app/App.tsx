@@ -486,15 +486,15 @@ function Header({ cartCount, onNavigate, mobileOpen, setMobileOpen }: {
         <div className="flex items-center gap-3 ml-auto">
           {/* Location badge (short label in header) */}
           <a
-            href={"https://www.google.com/maps?q=18.517639,73.932667"}
+            href={"https://www.google.com/maps/search/Roystonea%20Gate/@18.51770336,73.93088147,17z?hl=en"}
             target="_blank"
             rel="noopener noreferrer"
-            title={"GW9M+333, Pune, Maharashtra — Coordinates: 18°31'03.5\"N 73°55'57.6\"E"}
+            title={"Roystonea Gate, Pune, Maharashtra — Coordinates: 18.517703, 73.930881"}
             className="location-badge inline-flex items-center gap-2 px-3 py-1 rounded-full"
             style={{ backgroundColor: "#E8F5E9", textDecoration: "none" }}
           >
             <MapPin size={16} className="location-badge-icon" style={{ color: "#1B4332" }} />
-            <span className="location-badge-label" style={{ color: "#1B4332", fontWeight: 600, fontSize: 13 }}>Pune</span>
+            <span className="location-badge-label" style={{ color: "#1B4332", fontWeight: 600, fontSize: 13 }}>Roystonea Gate</span>
           </a>
 
           <style>{`

@@ -80,7 +80,7 @@ export function ContactPage({ onNavigate }: ContactPageProps) {
           </a>
 
           <a
-            href={"https://www.google.com/maps?q=18.517639,73.932667"}
+            href={"https://www.google.com/maps/search/Roystonea%20Gate/@18.51770336,73.93088147,17z?hl=en"}
             target="_blank"
             rel="noopener noreferrer"
             className="group relative overflow-hidden rounded-[28px] border border-white/60 bg-white p-6 shadow-[0_18px_50px_rgba(0,0,0,0.08)] transition-transform duration-300 hover:-translate-y-1 hover:shadow-[0_24px_60px_rgba(0,0,0,0.12)]"
@@ -90,8 +90,8 @@ export function ContactPage({ onNavigate }: ContactPageProps) {
             </div>
             <p className="text-sm font-semibold uppercase tracking-[0.3em] text-[#1B4332]/80 mb-2">Location</p>
             <div className="text-sm leading-relaxed text-muted-foreground">
-              <div style={{ fontWeight: 700, color: "#1B4332" }}>GW9M+333, Pune, Maharashtra</div>
-              <div style={{ marginTop: 4 }}>18°31'03.5"N 73°55'57.6"E</div>
+              <div style={{ fontWeight: 700, color: "#1B4332" }}>Roystonea Gate, Pune, Maharashtra</div>
+              <div style={{ marginTop: 4 }}>18.517703, 73.930881</div>
               <div style={{ marginTop: 8, textDecoration: "underline", color: "#1B4332", fontWeight: 700 }}>Tap to open in Google Maps</div>
             </div>
           </a>
