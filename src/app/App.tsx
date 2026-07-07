@@ -629,7 +629,7 @@ function HomePage({ onNavigate, variantSelections, setVariantSelections, testimo
         <div className="relative z-10 mx-auto flex min-h-[360px] max-w-7xl flex-col justify-start gap-8 pt-8 pb-10 sm:min-h-[420px] md:min-h-[460px] lg:min-h-[520px] lg:pt-12 lg:pb-14">
           <div className="max-w-2xl">
             <h1 className="mb-5 text-4xl font-bold leading-[1.1] text-white md:text-5xl lg:text-[3.4rem]" style={{ fontFamily: "'Playfair Display', serif" }}>
-              Traditional Maharashtrian <span style={{ color: "#E8F5E9" }}>Diwali Faral, Ladoo &amp; Snacks</span>
+              Traditional Maharashtrian <span style={{ color: "#E8F5E9" }}>Diwali Faral, Healthy Ladoo &amp; Snacks</span>
             </h1>
             <p className="mb-8 max-w-md text-base leading-relaxed text-white/90 md:text-lg">
               Experience authentic Maharashtrian Faral handcrafted in Pune since 2015. Fresh Ladoo, Karanji, Chakli, Chivda, and festive sweets made using traditional family recipes with no preservatives.
