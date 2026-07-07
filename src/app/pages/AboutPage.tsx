@@ -9,6 +9,7 @@ import {
   HandHeart,
   Leaf,
   ScrollText,
+  MapPin,
 } from "lucide-react";
 
 import { Button } from "../components/ui/button";
@@ -159,6 +160,24 @@ export function AboutPage({ onNavigate }: AboutPageProps) {
                     <MessageCircle size={18} strokeWidth={2} style={{ color: "#1B4332" }} />
                   </span>
                   <span className="font-medium">Message on WhatsApp</span>
+                </a>
+
+                <a
+                  href={"https://www.google.com/maps?q=18.517639,73.932667"}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="group flex items-center gap-3 rounded-[18px] border border-[#E8F3DD] bg-[#FBFBF7] p-4 transition hover:-translate-y-0.5 hover:shadow-lg"
+                >
+                  <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[#E8F3DD] shadow-[0_12px_26px_rgba(139,195,74,0.14)]">
+                    <MapPin size={18} strokeWidth={2} style={{ color: "#1B4332" }} />
+                  </span>
+                  <span className="font-medium">
+                    📍 GW9M+333, Pune, Maharashtra
+                    <br />
+                    Coordinates: 18°31'03.5"N 73°55'57.6"E
+                    <br />
+                    <span style={{ textDecoration: "underline", color: "#1B4332", fontWeight: 700 }}>View on Google Maps →</span>
+                  </span>
                 </a>
 
                 <div className="grid gap-3 text-sm md:grid-cols-2">

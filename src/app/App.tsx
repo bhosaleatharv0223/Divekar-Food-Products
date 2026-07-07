@@ -484,6 +484,39 @@ function Header({ cartCount, onNavigate, mobileOpen, setMobileOpen }: {
 
         {/* Actions */}
         <div className="flex items-center gap-3 ml-auto">
+          {/* Location badge (short label in header) */}
+          <a
+            href={"https://www.google.com/maps?q=18.517639,73.932667"}
+            target="_blank"
+            rel="noopener noreferrer"
+            title={"GW9M+333, Pune, Maharashtra — Coordinates: 18°31'03.5\"N 73°55'57.6\"E"}
+            className="location-badge inline-flex items-center gap-2 px-3 py-1 rounded-full"
+            style={{ backgroundColor: "#E8F5E9", textDecoration: "none" }}
+          >
+            <MapPin size={16} className="location-badge-icon" style={{ color: "#1B4332" }} />
+            <span className="location-badge-label" style={{ color: "#1B4332", fontWeight: 600, fontSize: 13 }}>Pune</span>
+          </a>
+
+          <style>{`
+            @keyframes locationShake {
+              0%, 100% { transform: translateX(0); }
+              10% { transform: translateX(-2px) rotate(-3deg); }
+              20% { transform: translateX(2px) rotate(3deg); }
+              30% { transform: translateX(-2px) rotate(-3deg); }
+              40% { transform: translateX(2px) rotate(3deg); }
+              50% { transform: translateX(-1px) rotate(-2deg); }
+              60% { transform: translateX(1px) rotate(2deg); }
+              70%, 100% { transform: translateX(0) rotate(0); }
+            }
+            .location-badge-icon {
+              animation: locationShake 0.8s ease-in-out 1;
+              animation-delay: 1s;
+            }
+            /* hide text label on very small screens */
+            @media (max-width: 420px) {
+              .location-badge-label { display: none; }
+            }
+          `}</style>
           <button type="button" className="hidden md:flex text-muted-foreground hover:text-foreground transition-colors p-1">
             <Search size={20} />
           </button>

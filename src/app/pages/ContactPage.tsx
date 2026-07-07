@@ -79,13 +79,22 @@ export function ContactPage({ onNavigate }: ContactPageProps) {
             <p className="text-sm leading-relaxed text-muted-foreground break-all">{EMAIL}</p>
           </a>
 
-          <div className="group relative overflow-hidden rounded-[28px] border border-white/60 bg-white p-6 shadow-[0_18px_50px_rgba(0,0,0,0.08)] transition-transform duration-300 hover:-translate-y-1 hover:shadow-[0_24px_60px_rgba(0,0,0,0.12)]">
+          <a
+            href={"https://www.google.com/maps?q=18.517639,73.932667"}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group relative overflow-hidden rounded-[28px] border border-white/60 bg-white p-6 shadow-[0_18px_50px_rgba(0,0,0,0.08)] transition-transform duration-300 hover:-translate-y-1 hover:shadow-[0_24px_60px_rgba(0,0,0,0.12)]"
+          >
             <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-full bg-[#E8F3DD] shadow-[0_14px_30px_rgba(139,195,74,0.16)]">
               <MapPin size={22} strokeWidth={1.8} style={{ color: "#1B4332" }} />
             </div>
             <p className="text-sm font-semibold uppercase tracking-[0.3em] text-[#1B4332]/80 mb-2">Location</p>
-            <p className="text-sm leading-relaxed text-muted-foreground">{ADDRESS}</p>
-          </div>
+            <div className="text-sm leading-relaxed text-muted-foreground">
+              <div style={{ fontWeight: 700, color: "#1B4332" }}>GW9M+333, Pune, Maharashtra</div>
+              <div style={{ marginTop: 4 }}>18°31'03.5"N 73°55'57.6"E</div>
+              <div style={{ marginTop: 8, textDecoration: "underline", color: "#1B4332", fontWeight: 700 }}>Tap to open in Google Maps</div>
+            </div>
+          </a>
 
           <div className="rounded-[28px] bg-[#F1EDE0] p-6">
             <div className="mb-4 inline-flex h-10 w-10 items-center justify-center rounded-full bg-[#F9F1E5] shadow-[0_10px_24px_rgba(27,67,50,0.08)]">
