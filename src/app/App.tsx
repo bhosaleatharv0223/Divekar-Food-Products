@@ -52,6 +52,9 @@ const HERO_IMAGES = [
   "/ChatGPT Image Jul 6, 2026, 06_05_06 PM.png",
 ];
 
+// Category display priority used for views that show "All" products.
+const CATEGORY_ORDER: Record<string, number> = { faral: 0, chiwda: 1, shev: 2, ladoo: 3 };
+
 // ── Types ──────────────────────────────────────────────────────────────────────
 
 type Page = "home" | "shop" | "detail" | "about" | "contact" | "faq" | "checkout";
@@ -649,8 +652,11 @@ function HomePage({ onNavigate, variantSelections, setVariantSelections, testimo
             .quick-shop-track > * { backface-visibility: hidden; }
           `}</style>
           <div className="overflow-hidden rounded-2xl border border-border/60 bg-card/60 p-3 shadow-sm sm:p-4">
+            {/* Order products for the marquee by category priority so Faral appears first */}
             <div className="quick-shop-track flex w-max gap-3" aria-label="All products">
-              {[...PRODUCTS, ...PRODUCTS].map((product, index) => (
+              {(() => {
+                const quickProducts = [...PRODUCTS].sort((a, b) => CATEGORY_ORDER[a.category] - CATEGORY_ORDER[b.category]);
+                return [...quickProducts, ...quickProducts].map((product, index) => (
                 <button
                   key={`${product.id}-${index}`}
                   type="button"
@@ -669,7 +675,7 @@ function HomePage({ onNavigate, variantSelections, setVariantSelections, testimo
                     <p className="mt-1 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">{product.categoryLabel}</p>
                   </div>
                 </button>
-              ))}
+              ))})()}
             </div>
           </div>
         </div>
@@ -972,6 +978,10 @@ function ShopPage({ filterCategory, setFilterCategory, variantSelections, setVar
     return matchCat && (!q || p.name.toLowerCase().includes(q) || p.shortDesc);
   });
 
+  const displayedProducts = filterCategory === "all"
+    ? [...filtered].sort((a, b) => CATEGORY_ORDER[a.category] - CATEGORY_ORDER[b.category])
+    : filtered;
+
   return (
     <main className="pb-24">
       <div className="bg-background border-b border-border py-12 px-5">
@@ -1001,11 +1011,11 @@ function ShopPage({ filterCategory, setFilterCategory, variantSelections, setVar
               {f.label}
             </button>
           ))}
-          <span className="ml-auto text-sm text-muted-foreground font-medium">{filtered.length} {filtered.length === 1 ? "product" : "products"}</span>
+          <span className="ml-auto text-sm text-muted-foreground font-medium">{displayedProducts.length} {displayedProducts.length === 1 ? "product" : "products"}</span>
         </div>
-        {filtered.length > 0 ? (
+        {displayedProducts.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filtered.map(product => (
+            {displayedProducts.map(product => (
               <ProductCard key={product.id} product={product} variant={variantSelections[product.id] ?? "oil"}
                 onVariantChange={v => setVariantSelections(prev => ({ ...prev, [product.id]: v }))}
                 onNavigate={onNavigate} />
