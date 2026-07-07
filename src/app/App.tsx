@@ -23,6 +23,7 @@ const imgChakali = "/Chakali.png";
 const imgTraditionalChivda = "/Chivada.png";
 const imgCornPohaChivda = "/corn%20chivada.png";
 const imgDinkLadoo = "/DINK%20LADU.png";
+const imgDinkLadooNew = "/sweet-dink-laddu-also-known-as-dinkache-ladoo-gond-ke-laddoo-made-using-edible-gum-with-dry-fruits_466689-23694.avif";
 const imgJavasLadoo = "/JAVAS%20LADU.png";
 const imgLasunShev = "/LASUN%20SHEV.png";
 const imgMethiLadoo = "/METHI%20LADDU.png";
@@ -33,6 +34,7 @@ const imgRawaLadoo = "/Rava%20LAddu.png";
 const imgShankarpaliPublic = "/Shankarpali.png";
 const imgPeanutLadoo = "/SHENGADANS.png";
 const imgShevLadooPublic = "/Shev%20laddu.png";
+const imgShevLadooNew = "/hq720.jpg";
 const imgTilgudLadoo = "/Tilgul%20laddu.png";
 const imgUradLadoo = "/uriddal%20ladu.png";
 const imgWheatLadoo = "/wheat%20ladu.png";
@@ -44,6 +46,21 @@ const imgHirveMoongLadoo = "/Horvemoog laddo.png";
 const imgBhadangChiwda = "/bhadang chiwada.png";
 const imgNamkinShankarpali = "/1000324538.jpg";
 const imgChirote = "/1000324543.jpg";
+const imgMoongDalLadooNew = "/7ef928ae63a0fadbdb3a03c60275c756.jpg";
+const imgBhajniChakliNew = "/1000325584.jpg";
+const imgPudachiKaranjiNew = "/1000325589.jpg";
+const imgBesanLadooNew = "/1000325590.webp";
+const imgRawaLadooNew = "/1000325597.jpg";
+const imgNamkinShankarpaliNew = "/1000325654.jpg";
+const imgAnarseNew = "/1000325657.jpg";
+const imgCornChivdaNew = "/1000325658.jpg";
+const imgTilgudLadooNew = "/1000325684.jpg";
+const imgUradLadooNew = "/indian-traditional-sweet-food-urad-dal-laddu-also-know-as-laddoo-ladoo-laddo-ball-shaped-sweets-made-butter-dry-fruits-195178336.webp";
+const imgJavasLadooNew = "/hqdefault.jpg";
+const imgMethiLadooNew = "/methi-ladoo-dryfruit-chhaya-kart-01.webp";
+const imgNachniLadooNew = "/nachni-laddu-ragi-laddoo-sweet-balls-made-using-finger-millet-jaggery-ghee_466689-90970.jpg";
+const imgHirveMoongLadooNew = "/OIP.jpg";
+const imgPeanutLadooNew = "/peanut-ladoo-2.jpg";
 
 const HERO_IMAGES = [
   "/ChatGPT Image Jul 6, 2026, 06_17_04 PM.png",
@@ -109,7 +126,7 @@ const PRODUCTS: Product[] = [
     id: 1, name: "Dink Ladoo", category: "ladoo", categoryLabel: "LADOO",
     shortDesc: "Gum resin & dry fruits — warming winter immunity boost",
     ingredients: "Gum resin (dink), jaggery, wheat flour, dry fruits, pure ghee, cardamom",
-    price: 1050, image: UNSUNS.ladoo1, localImg: imgDinkLadoo
+    price: 1050, image: UNSUNS.ladoo1, localImg: imgDinkLadooNew
   },
   {
     id: 2, name: "Khajur Dryfruit Ladoo", category: "ladoo", categoryLabel: "LADOO",
@@ -121,13 +138,13 @@ const PRODUCTS: Product[] = [
     id: 3, name: "Peanut Ladoo", category: "ladoo", categoryLabel: "LADOO",
     shortDesc: "Roasted peanuts & jaggery — simple, wholesome, protein-packed",
     ingredients: "Peanuts, jaggery, cardamom, dry coconut",
-    price: 650, image: UNSUNS.ladoo3, localImg: imgPeanutLadoo
+    price: 650, image: UNSUNS.ladoo3, localImg: imgPeanutLadooNew
   },
   {
     id: 4, name: "Methi Dink Ladoo", category: "ladoo", categoryLabel: "LADOO",
     shortDesc: "Fenugreek seeds & gum resin — traditional post-delivery nourishment",
     ingredients: "Fenugreek seeds, gum resin, jaggery, wheat flour, ghee",
-    price: 1150, image: UNSUNS.ladoo4, localImg: imgMethiLadoo
+    price: 1150, image: UNSUNS.ladoo4, localImg: imgMethiLadooNew
   },
   {
     id: 5, name: "Aliv Ladoo", category: "ladoo", categoryLabel: "LADOO",
@@ -139,37 +156,37 @@ const PRODUCTS: Product[] = [
     id: 6, name: "Moong Dal Ladoo", category: "ladoo", categoryLabel: "LADOO",
     shortDesc: "Yellow moong dal roasted with pure ghee",
     ingredients: "Yellow moong dal, jaggery, ghee, cardamom, dry coconut",
-    price: 850, image: UNSUNS.ladoo2, localImg: imgMoongDalLadoo
+    price: 850, image: UNSUNS.ladoo2, localImg: imgMoongDalLadooNew
   },
   {
     id: 7, name: "Hirve Moong Ladoo", category: "ladoo", categoryLabel: "LADOO",
     shortDesc: "Green moong dal — protein-rich, light on the stomach",
     ingredients: "Green moong dal, jaggery, ghee, cardamom",
-    price: 850, image: UNSUNS.ladoo3, localImg: imgHirveMoongLadoo
+    price: 850, image: UNSUNS.ladoo3, localImg: imgHirveMoongLadooNew
   },
   {
     id: 8, name: "Urad Dal Ladoo", category: "ladoo", categoryLabel: "LADOO",
     shortDesc: "Black gram with ghee — traditionally served for bone health",
     ingredients: "Urad dal, jaggery, ghee, cardamom, edible gum",
-    price: 850, image: UNSUNS.ladoo4, localImg: imgUradLadoo
+    price: 850, image: UNSUNS.ladoo4, localImg: imgUradLadooNew
   },
   {
     id: 9, name: "Javas Ladoo", category: "ladoo", categoryLabel: "LADOO",
     shortDesc: "Flaxseeds — omega-3 rich, heart-healthy snack",
     ingredients: "Flaxseeds (javas), jaggery, dry coconut, cardamom",
-    price: 850, image: UNSUNS.ladoo1, localImg: imgJavasLadoo
+    price: 850, image: UNSUNS.ladoo1, localImg: imgJavasLadooNew
   },
   {
     id: 10, name: "Nachni (Ragi) Ladoo", category: "ladoo", categoryLabel: "LADOO",
     shortDesc: "Finger millet with jaggery — calcium-rich, bone-strengthening",
     ingredients: "Ragi flour, jaggery, ghee, dry coconut, cardamom",
-    price: 850, image: UNSUNS.ladoo2, localImg: imgNachniLadoo
+    price: 850, image: UNSUNS.ladoo2, localImg: imgNachniLadooNew
   },
   {
     id: 11, name: "Tilgud Ladoo", category: "ladoo", categoryLabel: "LADOO",
     shortDesc: "Sesame & jaggery — Makar Sankranti special, warming & nutritious",
     ingredients: "Sesame seeds, jaggery, ghee, cardamom",
-    price: 650, image: UNSUNS.ladoo3, localImg: imgTilgudLadoo
+    price: 650, image: UNSUNS.ladoo3, localImg: imgTilgudLadooNew
   },
   {
     id: 12, name: "Paushtik Ladoo", category: "ladoo", categoryLabel: "LADOO",
@@ -190,13 +207,13 @@ const PRODUCTS: Product[] = [
     id: 14, name: "Bhajni Chakli", category: "faral", categoryLabel: "FARAL",
     shortDesc: "Crispy spiral snack from mixed flour — Diwali essential",
     ingredients: "Mixed flour blend, sesame seeds, cumin, carom seeds, butter",
-    price: 650, image: UNSUNS.snack1, localImg: imgChakali, featured: true
+    price: 650, image: UNSUNS.snack1, localImg: imgBhajniChakliNew, featured: true
   },
   {
     id: 15, name: "Rawa Ladoo", category: "faral", categoryLabel: "LADOO",
     shortDesc: "Semolina & coconut ladoo — a quick-prep festive classic",
     ingredients: "Semolina, coconut, sugar, ghee, cardamom, cashews",
-    price: 600, image: UNSUNS.ladoo3, localImg: imgRawaLadoo
+    price: 600, image: UNSUNS.ladoo3, localImg: imgRawaLadooNew
   },
   {
     id: 16, name: "Bundi Ladoo", category: "faral", categoryLabel: "LADOO",
@@ -208,13 +225,13 @@ const PRODUCTS: Product[] = [
     id: 17, name: "Shev Che Ladoo", category: "faral", categoryLabel: "LADOO",
     shortDesc: "Crispy sev bound with pure ghee — uniquely textured & satisfying",
     ingredients: "Besan sev, jaggery, ghee, sesame, cardamom",
-    price: 600, image: UNSUNS.snack2, localImg: imgShevLadooPublic, featured: true
+    price: 600, image: UNSUNS.snack2, localImg: imgShevLadooNew, featured: true
   },
   {
     id: 18, name: "Besan Ladoo", category: "faral", categoryLabel: "LADOO",
     shortDesc: "Slow-roasted chickpea flour with ghee & sugar — melt-in-mouth",
     ingredients: "Besan, sugar, pure ghee, cardamom, almonds",
-    price: 750, image: UNSUNS.ladoo2, localImg: imgBesanLadoo
+    price: 750, image: UNSUNS.ladoo2, localImg: imgBesanLadooNew
   },
   {
     id: 19, name: "Sweet Shankarpali", category: "faral", categoryLabel: "FARAL",
@@ -226,7 +243,7 @@ const PRODUCTS: Product[] = [
     id: 20, name: "Namkin Shankarpali", category: "faral", categoryLabel: "FARAL",
     shortDesc: "Savory crispy diamond pastry — perfect with a hot cup of chai",
     ingredients: "Wheat flour, butter, carom seeds, sesame, salt, chilli",
-    price: 580, image: UNSUNS.snack2, localImg: imgNamkinShankarpali
+    price: 580, image: UNSUNS.snack2, localImg: imgNamkinShankarpaliNew
   },
   {
     id: 21, name: "Wheat Mathri", category: "faral", categoryLabel: "FARAL",
@@ -238,7 +255,7 @@ const PRODUCTS: Product[] = [
     id: 22, name: "Pudachi Karanji", category: "faral", categoryLabel: "FARAL",
     shortDesc: "Coconut-filled crescent pastry — Diwali favourite, price varies by medium",
     ingredients: "Wheat flour, dry coconut, sugar, cardamom, sesame",
-    price: 680, gheePrice: 900, image: UNSUNS.snack2, localImg: imgPudachiKaranjiPublic, hasVariant: true
+    price: 680, gheePrice: 900, image: UNSUNS.snack2, localImg: imgPudachiKaranjiNew, hasVariant: true
   },
   {
     id: 23, name: "Chirote", category: "faral", categoryLabel: "FARAL",
@@ -250,7 +267,7 @@ const PRODUCTS: Product[] = [
     id: 24, name: "Anarse", category: "faral", categoryLabel: "FARAL",
     shortDesc: "Traditional Diwali sesame rice cookies — delicate, melt-away",
     ingredients: "Rice flour, sesame seeds, jaggery, ghee or refined oil",
-    price: 680, gheePrice: 900, image: UNSUNS.snack1, localImg: imgAnarsePublic, hasVariant: true
+    price: 680, gheePrice: 900, image: UNSUNS.snack1, localImg: imgAnarseNew, hasVariant: true
   },
 
 
@@ -265,7 +282,7 @@ const PRODUCTS: Product[] = [
     id: 26, name: "Corn Poha Chivda", category: "chiwda", categoryLabel: "CHIWDA",
     shortDesc: "Corn puffs mixture — light, crunchy everyday snack",
     ingredients: "Corn puffs, peanuts, dry coconut, curry leaves, spices",
-    price: 520, image: UNSUNS.snack1, localImg: imgCornPohaChivda
+    price: 520, image: UNSUNS.snack1, localImg: imgCornChivdaNew
   },
   {
     id: 27, name: "Bhadang Chiwda", category: "chiwda", categoryLabel: "CHIWDA",
