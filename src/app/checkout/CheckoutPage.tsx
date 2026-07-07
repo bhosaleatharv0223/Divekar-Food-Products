@@ -294,10 +294,8 @@ export function CheckoutPage({ cartItems, onNavigateBack }: Props) {
     setSubmitting(true);
     setSubmitError(null);
 
-    // Open a blank window synchronously so subsequent navigation is treated
-    // as a user-initiated action by the browser. If blocked, we'll show the
-    // visible fallback link in the success UI.
-    const whatsappWindow = window.open("", "_blank");
+    // Do not open a blank window here; the final WhatsApp link is available
+    // synchronously after upload and will be opened from the success screen.
 
     try {
       // Stage 1: capture bill image
@@ -357,40 +355,9 @@ ${itemsText}
       const builtWaUrl = `https://wa.me/${CONTACT_NUMBER}?text=${encodeURIComponent(message)}`;
       setWaUrl(builtWaUrl);
 
-      if (whatsappWindow) {
-        try {
-          // First attempt a direct navigation.
-          whatsappWindow.location.href = builtWaUrl;
-          whatsappWindow.focus();
-
-          // Some browsers open the blank tab but block navigation. As a
-          // more robust fallback, write a tiny redirect page into the
-          // opened tab (same-origin about:blank allows this). The page
-          // contains a meta-refresh, a script-based replace, and a link
-          // so the user can manually proceed if needed.
-          setTimeout(() => {
-            try {
-              const loc = whatsappWindow.location && whatsappWindow.location.href;
-              if (!loc || loc === "about:blank") {
-                const safeUrl = builtWaUrl.replace(/"/g, '&quot;');
-                const html = `<!doctype html><html><head><meta charset=\"utf-8\"><meta http-equiv=\"refresh\" content=\"0;url=${safeUrl}\"><title>Open WhatsApp</title></head><body style=\"font-family:system-ui,Arial,sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;\"><div style=\"text-align:center;\"><p style=\"margin-bottom:12px;\">Opening WhatsApp…</p><a href=\"${safeUrl}\" style=\"display:inline-block;padding:12px 20px;border-radius:8px;background:#25D366;color:#fff;text-decoration:none;font-weight:700\">Open WhatsApp</a><script>setTimeout(function(){try{location.replace(${JSON.stringify(safeUrl)})}catch(e){/* ignore */}},100)</script></div></body></html>`;
-                whatsappWindow.document.open();
-                whatsappWindow.document.write(html);
-                whatsappWindow.document.close();
-              }
-            } catch (e) {
-              // ignore - writing may fail in some popup scenarios
-            }
-          }, 250);
-        } catch (navErr) {
-          console.warn("Could not navigate opened window:", navErr);
-          alert("Popup opened but could not navigate. Please click the WhatsApp button.");
-        }
-      } else {
-        alert("Popup was blocked. Please click the WhatsApp button to open the chat.");
-      }
-
-      // TODO: submit the bill data to a backend or customer service workflow.
+      // The final wa.me URL is available now; store it and show the success
+      // screen. The success UI has a direct `window.open(waUrl)` button so
+      // we don't need to open a blank tab here.
       setSubmitStage("Order submitted successfully.");
       setStep(6);
     } catch (err) {
