@@ -635,15 +635,18 @@ function HomePage({ onNavigate, variantSelections, setVariantSelections, testimo
           </div>
           <style>{`
             @keyframes scroll {
-              from { transform: translateX(0); }
-              to { transform: translateX(-50%); }
+              from { transform: translate3d(0,0,0); }
+              to { transform: translate3d(-50%,0,0); }
             }
             .quick-shop-track {
-              animation: scroll 60s linear infinite;
+              animation: scroll 120s linear infinite;
+              will-change: transform;
             }
             .quick-shop-track:hover {
               animation-play-state: paused;
             }
+            /* Improve smoothness on some browsers */
+            .quick-shop-track > * { backface-visibility: hidden; }
           `}</style>
           <div className="overflow-hidden rounded-2xl border border-border/60 bg-card/60 p-3 shadow-sm sm:p-4">
             <div className="quick-shop-track flex w-max gap-3" aria-label="All products">
