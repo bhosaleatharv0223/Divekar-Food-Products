@@ -18,12 +18,12 @@ import imgLogo from "../imports/ChatGPT_Image_Jul_4__2026__04_42_01_PM.png";
 const imgAlivLadoo = "/Aliv%20laddu.png";
 const imgWheatMathriPublic = "/Anarase.png";
 const imgBesanLadoo = "/Bessen%20laddo.png";
-const imgBundiLadoo = "/boondi%20laddos.png";
+const imgBundiLadoo = "/1000326501.jpg";
 const imgChakali = "/Chakali.png";
 const imgTraditionalChivda = "/Chivada.png";
 const imgCornPohaChivda = "/corn%20chivada.png";
 const imgDinkLadoo = "/DINK%20LADU.png";
-const imgDinkLadooNew = "/sweet-dink-laddu-also-known-as-dinkache-ladoo-gond-ke-laddoo-made-using-edible-gum-with-dry-fruits_466689-23694.avif";
+const imgDinkLadooNew = "/1000326503.jpg";
 const imgJavasLadoo = "/JAVAS%20LADU.png";
 const imgLasunShev = "/LASUN%20SHEV.png";
 const imgMethiLadoo = "/METHI%20LADDU.png";
@@ -31,10 +31,10 @@ const imgNachniLadoo = "/NACHANI%20LADDU.png";
 const imgPatalPohaChivda = "/POHA%20PETAL%20CHIWADA.png";
 const imgPudachiKaranjiPublic = "/pudhachi%20kurrenjy.png";
 const imgRawaLadoo = "/Rava%20LAddu.png";
-const imgShankarpaliPublic = "/Shankarpali.png";
+const imgShankarpaliPublic = "/1000326500.jpg";
 const imgPeanutLadoo = "/SHENGADANS.png";
 const imgShevLadooPublic = "/Shev%20laddu.png";
-const imgShevLadooNew = "/hq720.jpg";
+const imgShevLadooNew = "/1000326498.jpg";
 const imgTilgudLadoo = "/Tilgul%20laddu.png";
 const imgUradLadoo = "/uriddal%20ladu.png";
 const imgWheatLadoo = "/wheat%20ladu.png";
@@ -47,7 +47,7 @@ const imgBhadangChiwda = "/bhadang chiwada.png";
 const imgNamkinShankarpali = "/1000324538.jpg";
 const imgChirote = "/1000324543.jpg";
 const imgMoongDalLadooNew = "/7ef928ae63a0fadbdb3a03c60275c756.jpg";
-const imgBhajniChakliNew = "/1000325584.jpg";
+const imgBhajniChakliNew = "/1000326499.jpg";
 const imgPudachiKaranjiNew = "/1000325589.jpg";
 const imgBesanLadooNew = "/1000325590.webp";
 const imgRawaLadooNew = "/1000325597.jpg";
@@ -58,7 +58,7 @@ const imgTilgudLadooNew = "/1000325684.jpg";
 const imgUradLadooNew = "/indian-traditional-sweet-food-urad-dal-laddu-also-know-as-laddoo-ladoo-laddo-ball-shaped-sweets-made-butter-dry-fruits-195178336.webp";
 const imgJavasLadooNew = "/hqdefault.jpg";
 const imgMethiLadooNew = "/methi-ladoo-dryfruit-chhaya-kart-01.webp";
-const imgNachniLadooNew = "/nachni-laddu-ragi-laddoo-sweet-balls-made-using-finger-millet-jaggery-ghee_466689-90970.jpg";
+const imgNachniLadooNew = "/1000326502.jpg";
 const imgHirveMoongLadooNew = "/OIP.jpg";
 const imgPeanutLadooNew = "/peanut-ladoo-2.jpg";
 
@@ -332,6 +332,13 @@ const TESTIMONIALS: Testimonial[] = [
 function computePrice(product: Product, variant: Variant): number {
   if (product.hasVariant && variant === "ghee" && product.gheePrice) return product.gheePrice;
   return product.price;
+}
+
+function formatWeight(weightGrams: number): string {
+  if (weightGrams % 1000 === 0) {
+    return `${weightGrams / 1000} kg`;
+  }
+  return `${(weightGrams / 1000).toFixed(1)} kg`;
 }
 
 function categoryDisplayName(cat: Product["category"]): string {
@@ -646,7 +653,7 @@ function HomePage({ onNavigate, variantSelections, setVariantSelections, testimo
         <div className="relative z-10 mx-auto flex min-h-[360px] max-w-7xl flex-col justify-start gap-8 pt-8 pb-10 sm:min-h-[420px] md:min-h-[460px] lg:min-h-[520px] lg:pt-12 lg:pb-14">
           <div className="max-w-2xl">
             <h1 className="mb-5 text-4xl font-bold leading-[1.1] text-white md:text-5xl lg:text-[3.4rem]" style={{ fontFamily: "'Playfair Display', serif" }}>
-              Traditional Maharashtrian <span style={{ color: "#E8F5E9" }}>Diwali Faral, Healthy Ladoo &amp; Snacks</span>
+              Traditional Maharashtrian <span style={{ color: "#E8F5E9" }}>Diwali Faral, Healthy Ladoo</span>
             </h1>
             <p className="mb-8 max-w-md text-base leading-relaxed text-white/90 md:text-lg">
               Experience authentic Maharashtrian Faral handcrafted in Pune since 2015. Fresh Ladoo, Karanji, Chakli, Chivda, and festive sweets made using traditional family recipes with no preservatives.
@@ -811,13 +818,13 @@ function HomePage({ onNavigate, variantSelections, setVariantSelections, testimo
               <div className="absolute top-4 right-4 w-9 h-9 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center group-hover:bg-white/35 transition-all"><ChevronRight size={18} color="white" /></div>
             </button>
 
-            {/* Ladoo tile � Unsplash */}
+            {/* Ladoo tile — real product photo */}
             <button
               onClick={() => onNavigate("shop", undefined, "ladoo")}
               className="relative rounded-2xl overflow-hidden group text-left bg-[#E8E2D0] cursor-pointer h-[280px] sm:h-[290px]"
             >
               <img
-                src={imgDryFruitsLadoo}
+                src={imgBhajniChakliNew}
                 alt="Immunity Ladoos"
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
               />
@@ -1097,7 +1104,7 @@ function ProductDetailPage({ product, variant, setVariant, weight, setWeight, on
   const isAdded = addedToCart === product.id;
   const imageSrc = product.localImg ?? product.image;
   const related = PRODUCTS.filter(p => p.category === product.category && p.id !== product.id).slice(0, 3);
-  const waMsg = `Hello! I'd like to order ${weight}g of ${product.name}${product.hasVariant ? ` (${variant === "oil" ? "Refined Oil" : "Pure Ghee"})` : ""} from Divekar Foods. Approx. total: Rs. ${formattedUnitPrice}. Please confirm availability.`;
+  const waMsg = `Hello! I'd like to order ${formatWeight(weight)} of ${product.name}${product.hasVariant ? ` (${variant === "oil" ? "Refined Oil" : "Pure Ghee"})` : ""} from Divekar Foods. Approx. total: Rs. ${formattedUnitPrice}. Please confirm availability.`;
 
   return (
     <main className="pb-24">
@@ -1172,24 +1179,24 @@ function ProductDetailPage({ product, variant, setVariant, weight, setWeight, on
               <div className="flex items-center rounded-full border-2 border-[#1B4332]/20 bg-white p-1.5">
                 <button
                   type="button"
-                  onClick={() => setWeight(current => Math.max(500, current - 100))}
+                  onClick={() => setWeight(current => Math.max(500, current - 500))}
                   disabled={weight <= 500}
                   className="flex h-11 w-11 items-center justify-center rounded-full text-[#1B4332] transition-colors hover:bg-[#E8F5E9] disabled:cursor-not-allowed disabled:opacity-30"
-                  aria-label="Decrease quantity by 100 grams"
+                  aria-label="Decrease quantity by 0.5 kilograms"
                 >
                   <Minus size={18} />
                 </button>
                 <div className="flex-1 text-center">
                   <p className="text-lg font-bold text-[#1B4332]">
-                    {weight >= 1000 ? `${(weight / 1000).toFixed(weight % 1000 === 0 ? 0 : 1)} kg` : `${weight}g`}
+                    {formatWeight(weight)}
                   </p>
                   <p className="text-xs text-muted-foreground">&#8377;{formattedUnitPrice} total</p>
                 </div>
                 <button
                   type="button"
-                  onClick={() => setWeight(current => current + 100)}
+                  onClick={() => setWeight(current => current + 500)}
                   className="flex h-11 w-11 items-center justify-center rounded-full bg-[#1B4332] text-white transition-colors hover:bg-[#14532d]"
-                  aria-label="Increase quantity by 100 grams"
+                  aria-label="Increase quantity by 0.5 kilograms"
                 >
                   <Plus size={18} />
                 </button>
