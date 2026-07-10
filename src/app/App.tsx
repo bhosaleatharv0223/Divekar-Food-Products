@@ -28,7 +28,7 @@ const imgJavasLadoo = "/JAVAS%20LADU.png";
 const imgLasunShev = "/LASUN%20SHEV.png";
 const imgMethiLadoo = "/METHI%20LADDU.png";
 const imgNachniLadoo = "/NACHANI%20LADDU.png";
-const imgPatalPohaChivda = "/POHA%20PETAL%20CHIWADA.png";
+const imgPatalPohaChivda = "/1000327330.jpg";
 const imgPudachiKaranjiPublic = "/pudhachi%20kurrenjy.png";
 const imgRawaLadoo = "/Rava%20LAddu.png";
 const imgShankarpaliPublic = "/1000326500.jpg";
@@ -292,12 +292,7 @@ const PRODUCTS: Product[] = [
   },
 
 
-  {
-    id: 29, name: "Traditional Chivda", category: "chiwda", categoryLabel: "CHIWDA",
-    shortDesc: "Classic Maharashtrian festive chivda with a crisp, savoury and gently spiced finish",
-    ingredients: "Flattened rice, peanuts, roasted gram, curry leaves, mustard seeds, turmeric and spices",
-    price: 500, image: UNSUNS.snack1, localImg: imgTraditionalChivda
-  },
+  // Traditional Chivda removed (not available)
 
   // ── Shev ───────────────────────────────────────────────────────────────────
   {
@@ -653,7 +648,7 @@ function HomePage({ onNavigate, variantSelections, setVariantSelections, testimo
         <div className="relative z-10 mx-auto flex min-h-[360px] max-w-7xl flex-col justify-start gap-8 pt-8 pb-10 sm:min-h-[420px] md:min-h-[460px] lg:min-h-[520px] lg:pt-12 lg:pb-14">
           <div className="max-w-2xl">
             <h1 className="mb-5 text-4xl font-bold leading-[1.1] text-white md:text-5xl lg:text-[3.4rem]" style={{ fontFamily: "'Playfair Display', serif" }}>
-              Traditional Maharashtrian <span style={{ color: "#E8F5E9" }}>Diwali Faral, Healthy Ladoo</span>
+              Traditional Maharashtrian Home made <span style={{ color: "#E8F5E9" }}>Diwali faral & Healthy Ladoos</span>
             </h1>
             <p className="mb-8 max-w-md text-base leading-relaxed text-white/90 md:text-lg">
               Experience authentic Maharashtrian Faral handcrafted in Pune since 2015. Fresh Ladoo, Karanji, Chakli, Chivda, and festive sweets made using traditional family recipes with no preservatives.
