@@ -798,13 +798,13 @@ function HomePage({ onNavigate, variantSelections, setVariantSelections, testimo
             <h2 className="text-3xl md:text-4xl font-bold text-foreground" style={{ fontFamily: "'Playfair Display', serif" }}>What Are You Craving?</h2>
           </div>
           <div className="grid md:grid-cols-2 gap-6">
-            {/* Faral tile � real Bhajni Chakli photo */}
+            {/* Faral tile — new product photo */}
             <button
               onClick={() => onNavigate("shop", undefined, "faral")}
               className="relative rounded-2xl overflow-hidden group text-left bg-[#3A2A1A] cursor-pointer h-[280px] sm:h-[290px]"
             >
               <ImageWithFallback
-                src={imgChakali}
+                src={imgBhajniChakliNew}
                 alt="Festival Faral and Sweets"
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
                 style={{ opacity: 0.85 }}
@@ -824,8 +824,8 @@ function HomePage({ onNavigate, variantSelections, setVariantSelections, testimo
               className="relative rounded-2xl overflow-hidden group text-left bg-[#E8E2D0] cursor-pointer h-[280px] sm:h-[290px]"
             >
               <img
-                src={imgBhajniChakliNew}
-                alt="Immunity Ladoos"
+                src={imgDryFruitsLadoo}
+                alt="Healthy Immunity Ladoos"
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
