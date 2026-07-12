@@ -20,7 +20,7 @@ const STEP_LABELS = [
   "Your Details",
   "Location",
   "Confirm Bill",
-];   
+];
 function StepBar({ current }: { current: number }) {
   return (
     <div

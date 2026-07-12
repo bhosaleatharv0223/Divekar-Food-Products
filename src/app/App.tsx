@@ -1312,6 +1312,52 @@ function Footer({ onNavigate }: { onNavigate: NavigateFn }) {
   );
 }
 
+function WhatsAppButton() {
+  const waNumber = "919579702008";
+  const waMessage = encodeURIComponent("Hello Divekar Foods! I’d like help with an order.");
+  const waUrl = `https://wa.me/${waNumber}?text=${waMessage}`;
+
+  return (
+    <a
+      href={waUrl}
+      target="_blank"
+      rel="noreferrer noopener"
+      aria-label="Chat on WhatsApp"
+      style={{
+        position: "fixed",
+        bottom: 20,
+        right: 20,
+        zIndex: 60,
+        display: "inline-flex",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: "12px 18px",
+        borderRadius: 999,
+        backgroundColor: "#25D366",
+        color: "#fff",
+        fontWeight: 700,
+        fontSize: 14,
+        textDecoration: "none",
+        boxShadow: "0 16px 40px rgba(0, 0, 0, 0.18)",
+        transition: "transform 0.2s ease, box-shadow 0.2s ease",
+      }}
+      onMouseEnter={event => {
+        (event.currentTarget as HTMLAnchorElement).style.transform = "translateY(-2px)";
+      }}
+      onMouseLeave={event => {
+        (event.currentTarget as HTMLAnchorElement).style.transform = "translateY(0)";
+      }}
+    >
+      <img
+        src="/whatsapp-logo-3d-render-free-png.webp"
+        alt="WhatsApp"
+        style={{ width: 20, height: 20, marginRight: 10, objectFit: "contain" }}
+      />
+      WhatsApp
+    </a>
+  );
+}
+
 // ── Root App ──────────────────────────────────────────────────────────────────
 
 export default function App() {
@@ -1395,6 +1441,7 @@ export default function App() {
 
       {/* Skip footer on checkout — it has its own bottom padding */}
       {page !== "checkout" && <Footer onNavigate={navigateTo} />}
+      <WhatsAppButton />
     </div>
   );
 }
