@@ -639,14 +639,14 @@ ${itemsText}
                 <div style={{ display: "flex", justifyContent: "space-between" }}>
                   <span style={{ fontSize: 13, color: "#6B6B6B" }}>Delivery</span>
                   <span style={{ fontSize: 13, fontWeight: 600, color: deliveryMethod === "porter" ? "#D97706" : "#1B4332" }}>
-                    {"🚴 Porter (no charge)"}
+                    {"🚚 Porter (no charge)"}
                   </span>
                 </div>
                 {location && (
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                     <span style={{ fontSize: 13, color: "#6B6B6B" }}>Location</span>
                     <a href={location.mapsLink} target="_blank" rel="noopener noreferrer" style={{ fontSize: 13, color: "#1B4332", fontWeight: 600 }}>
-                      📍 View on Maps
+                      🗺️ View on Maps
                     </a>
                   </div>
                 )}
@@ -679,7 +679,7 @@ ${itemsText}
                   color: "#991B1B",
                 }}
               >
-                ❌ {submitError}
+                ⚠️ {submitError}
               </div>
             )}
 
@@ -705,7 +705,7 @@ ${itemsText}
             >
               {submitting ? (
                 <>
-                  <span style={{ animation: "spin 1s linear infinite", display: "inline-block" }}>⟳</span>
+                  <span style={{ animation: "spin 1s linear infinite", display: "inline-block" }}>⟲</span>
                   {submitStage || "Processing…"}
                 </>
               ) : (
@@ -727,66 +727,97 @@ ${itemsText}
               flexDirection: "column",
               alignItems: "center",
               textAlign: "center",
-              paddingTop: 60,
+              paddingTop: 40,
               paddingBottom: 60,
-              gap: 16,
+              gap: 24,
             }}
           >
-            <div style={{ fontSize: 72 }}>✅</div>
-            <h2
+            <h1
               style={{
                 fontFamily: "'Playfair Display', serif",
-                fontSize: 30,
+                fontSize: 42,
                 fontWeight: 700,
-                color: "#1B4332",
+                color: "#8BC34A",
                 margin: 0,
+                padding: "20px 16px",
+                background: "#FFF9E6",
+                borderRadius: 16,
+                border: "3px solid #8BC34A",
+                letterSpacing: "0.02em",
               }}
             >
-              Order Sent!
-            </h2>
-            <p style={{ fontSize: 15, color: "#6B6B6B", maxWidth: 400, lineHeight: 1.6 }}>
-              Your bill and order details have been submitted. We'll confirm your order within 24 hours.
-            </p>
+              🛒 PLACE YOUR ORDER
+            </h1>
+
+            <div style={{ display: "flex", flexDirection: "column", gap: 12, maxWidth: 440 }}>
+              <p style={{ fontSize: 16, color: "#1C1C1C", lineHeight: 1.7, margin: 0, fontWeight: 600 }}>
+                Your bill is ready! Now send it to us via WhatsApp to complete your order.
+              </p>
+              <p style={{ fontSize: 14, color: "#6B6B6B", lineHeight: 1.6, margin: 0 }}>
+                Click the button below to open WhatsApp with your order details pre-filled.
+              </p>
+            </div>
+
+            {waUrl && (
+              <button
+                onClick={() => waUrl && window.open(waUrl, "_blank")}
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: 12,
+                  padding: "18px 32px",
+                  borderRadius: 999,
+                  background: "#25D366",
+                  color: "#fff",
+                  fontWeight: 700,
+                  fontSize: 18,
+                  textDecoration: "none",
+                  border: "none",
+                  cursor: "pointer",
+                  boxShadow: "0 4px 16px rgba(37, 211, 102, 0.4)",
+                  transition: "all 0.2s",
+                }}
+                onMouseEnter={(e) => {
+                  (e.currentTarget as HTMLButtonElement).style.background = "#20BA58";
+                  (e.currentTarget as HTMLButtonElement).style.transform = "scale(1.05)";
+                }}
+                onMouseLeave={(e) => {
+                  (e.currentTarget as HTMLButtonElement).style.background = "#25D366";
+                  (e.currentTarget as HTMLButtonElement).style.transform = "scale(1)";
+                }}
+              >
+                <span style={{ fontSize: 24 }}>📱</span>
+                Open WhatsApp & Send Order
+              </button>
+            )}
+
+            {waUrl && (
+              <div style={{ fontSize: 13, color: "#6B6B6B", maxWidth: 400 }}>
+                If WhatsApp doesn't open, <button
+                  onClick={() => { navigator.clipboard?.writeText(waUrl); alert("WhatsApp link copied to clipboard!"); }}
+                  style={{ background: "transparent", border: "none", color: "#8BC34A", fontWeight: 700, cursor: "pointer", textDecoration: "underline" }}
+                >
+                  click here to copy the link
+                </button> and paste it in your browser.
+              </div>
+            )}
+
             <div
               style={{
                 background: "#F0F7F1",
-                border: "1px solid #1B4332",
+                border: "2px solid #1B4332",
                 borderRadius: 12,
-                padding: "14px 20px",
-                fontSize: 13,
+                padding: "16px 20px",
+                fontSize: 14,
                 color: "#1B4332",
-                maxWidth: 360,
+                maxWidth: 400,
+                lineHeight: 1.6,
               }}
             >
-              🕐 All orders are <strong>made fresh to order</strong>. Expect a 2–3 day preparation
-              time before delivery.
+              ⏱️ All orders are <strong>made fresh to order</strong>. Expect a <strong>2–3 day preparation time</strong> before delivery.
             </div>
-            {waUrl && (
-              <div style={{ display: "flex", gap: 10, flexDirection: "column", alignItems: "center", marginTop: 12 }}>
-                <button
-                  onClick={() => waUrl && window.open(waUrl, "_blank")}
-                  style={{
-                    display: "inline-block",
-                    padding: "12px 20px",
-                    borderRadius: 999,
-                    background: "#25D366",
-                    color: "#fff",
-                    fontWeight: 700,
-                    textDecoration: "none",
-                    border: "none",
-                    cursor: "pointer",
-                  }}
-                >
-                  Open WhatsApp to send order
-                </button>
-                <div style={{ fontSize: 13, color: "#6B6B6B" }}>
-                  If the WhatsApp tab doesn't open, <button
-                    onClick={() => { navigator.clipboard?.writeText(waUrl); alert("WhatsApp link copied to clipboard."); }}
-                    style={{ background: "transparent", border: "none", color: "#1B4332", fontWeight: 700, cursor: "pointer" }}
-                  >click to copy the link</button> and open it manually.
-                </div>
-              </div>
-            )}
+
             <button
               onClick={onNavigateBack}
               style={{
@@ -799,7 +830,10 @@ ${itemsText}
                 fontSize: 15,
                 border: "none",
                 cursor: "pointer",
+                transition: "background 0.2s",
               }}
+              onMouseEnter={(e) => (e.currentTarget as HTMLButtonElement).style.background = "#2A5F4A"}
+              onMouseLeave={(e) => (e.currentTarget as HTMLButtonElement).style.background = "#1B4332"}
             >
               Continue Shopping
             </button>
